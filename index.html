@@ -77,17 +77,14 @@
         .nav-brand .logo {
             width: 38px;
             height: 38px;
+            background: linear-gradient(135deg, var(--accent), var(--cyan));
             border-radius: 10px;
             display: flex;
             align-items: center;
             justify-content: center;
-            overflow: hidden;
-        }
-
-        .nav-brand .logo img {
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
+            font-size: 18px;
+            font-weight: 800;
+            color: white;
         }
 
         .nav-brand span {
@@ -639,6 +636,162 @@
             font-weight: 300;
         }
 
+        /* ========== PREMIUM ========== */
+        .premium-section {
+            padding: 100px 32px;
+            background: linear-gradient(135deg, rgba(99, 91, 255, 0.05), rgba(6, 214, 160, 0.05));
+            position: relative;
+            overflow: hidden;
+        }
+
+        .premium-section::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            right: -10%;
+            width: 600px;
+            height: 600px;
+            background: radial-gradient(circle, rgba(255, 215, 0, 0.08), transparent 60%);
+            pointer-events: none;
+        }
+
+        .premium-inner {
+            max-width: 1200px;
+            margin: 0 auto;
+            position: relative;
+            z-index: 2;
+        }
+
+        .premium-content {
+            text-align: center;
+            margin-bottom: 60px;
+        }
+
+        .premium-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            padding: 8px 16px;
+            background: linear-gradient(135deg, rgba(255, 215, 0, 0.15), rgba(255, 107, 157, 0.15));
+            border: 1px solid rgba(255, 215, 0, 0.3);
+            border-radius: 100px;
+            font-size: 0.8rem;
+            font-weight: 600;
+            color: #FFD700;
+            margin-bottom: 24px;
+        }
+
+        .premium-title {
+            font-size: clamp(2rem, 4vw, 2.5rem);
+            font-weight: 800;
+            letter-spacing: -1px;
+            margin-bottom: 16px;
+            background: linear-gradient(135deg, #FFD700, #FFA500);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .premium-desc {
+            color: var(--text-secondary);
+            font-size: 1.1rem;
+            max-width: 600px;
+            margin: 0 auto 48px;
+        }
+
+        .premium-cards {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 24px;
+            margin-bottom: 48px;
+        }
+
+        .premium-card {
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            border-radius: 20px;
+            padding: 40px 32px;
+            text-align: center;
+            transition: all 0.3s ease;
+            position: relative;
+        }
+
+        .premium-card:hover {
+            transform: translateY(-8px);
+            border-color: rgba(255, 215, 0, 0.5);
+            box-shadow: 0 20px 40px rgba(255, 215, 0, 0.1);
+        }
+
+        .premium-card.featured {
+            border-color: rgba(255, 215, 0, 0.5);
+            background: linear-gradient(135deg, rgba(99, 91, 255, 0.05), rgba(255, 215, 0, 0.05));
+        }
+
+        .premium-card.featured::before {
+            content: 'MOST POPULAR';
+            position: absolute;
+            top: -12px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: linear-gradient(135deg, #FFD700, #FFA500);
+            color: #000;
+            font-size: 0.7rem;
+            font-weight: 700;
+            padding: 4px 16px;
+            border-radius: 100px;
+            letter-spacing: 0.5px;
+        }
+
+        .premium-icon {
+            font-size: 48px;
+            margin-bottom: 20px;
+        }
+
+        .premium-card h3 {
+            font-size: 1.4rem;
+            font-weight: 700;
+            margin-bottom: 8px;
+        }
+
+        .premium-price {
+            font-size: 2.5rem;
+            font-weight: 800;
+            color: #FFD700;
+            margin: 16px 0;
+        }
+
+        .premium-price span {
+            font-size: 1rem;
+            color: var(--text-secondary);
+            font-weight: 400;
+        }
+
+        .premium-features {
+            list-style: none;
+            text-align: left;
+            margin: 24px 0;
+        }
+
+        .premium-features li {
+            padding: 10px 0;
+            color: var(--text-secondary);
+            font-size: 0.9rem;
+            display: flex;
+            align-items: flex-start;
+            gap: 10px;
+        }
+
+        .premium-features li::before {
+            content: '✓';
+            color: #06d6a0;
+            font-weight: 700;
+            flex-shrink: 0;
+        }
+
+        .premium-cta {
+            margin-top: 32px;
+        }
+
         /* ========== CTA ========== */
         .cta-section {
             padding: 120px 32px;
@@ -720,17 +873,14 @@
         .footer-brand .logo {
             width: 30px;
             height: 30px;
+            background: linear-gradient(135deg, var(--accent), var(--cyan));
             border-radius: 8px;
             display: flex;
             align-items: center;
             justify-content: center;
-            overflow: hidden;
-        }
-
-        .footer-brand .logo img {
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
+            font-size: 14px;
+            font-weight: 800;
+            color: white;
         }
 
         .footer-brand span {
@@ -802,7 +952,7 @@
 <nav id="navbar">
     <div class="nav-inner">
         <a href="#" class="nav-brand">
-            <div class="logo"><img src="jarvis-logo.jpg" alt="Jarvis Logo"></div>
+            <div class="logo">J</div>
             <span>Jarvis</span>
         </a>
         <ul class="nav-links">
@@ -810,6 +960,7 @@
             <li><a href="#commands">Commands</a></li>
             <li><a href="#leaderboard">Leaderboard</a></li>
             <li><a href="#streams">Streams</a></li>
+            <li><a href="#premium">Premium</a></li>
             <li><a href="https://discord.com/oauth2/authorize?client_id=1465488984254714010&permissions=8&scope=bot%20applications.commands" class="btn btn-primary">Add to Discord</a></li>
         </ul>
         <button class="mobile-menu" onclick="document.querySelector('.nav-links').classList.toggle('show')">☰</button>
@@ -1029,6 +1180,86 @@
     </div>
 </section>
 
+<!-- PREMIUM -->
+<section class="premium-section" id="premium">
+    <div class="premium-inner">
+        <div class="premium-content reveal">
+            <div class="premium-badge">
+                <span>👑</span>
+                <span>PREMIUM FEATURES</span>
+            </div>
+            <h2 class="premium-title">Unlock Premium</h2>
+            <p class="premium-desc">Support Jarvis and get exclusive features with a one-time purchase. No subscriptions, keep it forever!</p>
+        </div>
+        
+        <div class="premium-cards">
+            <!-- Free Tier -->
+            <div class="premium-card reveal">
+                <div class="premium-icon">🎮</div>
+                <h3>Free</h3>
+                <div class="premium-price">$0<span>/forever</span></div>
+                <ul class="premium-features">
+                    <li>All core queue features</li>
+                    <li>Basic stats & leaderboards</li>
+                    <li>Music player</li>
+                    <li>Stream notifications</li>
+                    <li>Welcome messages</li>
+                    <li>Role management</li>
+                    <li>87+ commands</li>
+                </ul>
+                <div class="premium-cta">
+                    <a href="https://discord.com/oauth2/authorize?client_id=1465488984254714010&permissions=8&scope=bot%20applications.commands" class="btn btn-outline">Add to Discord</a>
+                </div>
+            </div>
+
+            <!-- Premium Tier -->
+            <div class="premium-card featured reveal">
+                <div class="premium-icon">👑</div>
+                <h3>Premium</h3>
+                <div class="premium-price">$4.99<span>/one-time</span></div>
+                <ul class="premium-features">
+                    <li><strong>Everything in Free, plus:</strong></li>
+                    <li>Custom premium profile card</li>
+                    <li>Personalized colors & themes</li>
+                    <li>Exclusive premium badge 👑</li>
+                    <li>Custom profile title</li>
+                    <li>Extended match history (50 vs 10)</li>
+                    <li>Premium stats section</li>
+                    <li>Priority support</li>
+                    <li>Lifetime access</li>
+                </ul>
+                <div class="premium-cta">
+                    <a href="https://discord.com/application-directory/1465488984254714010" class="btn btn-primary" target="_blank">Purchase Premium</a>
+                </div>
+            </div>
+
+            <!-- Support Tier -->
+            <div class="premium-card reveal">
+                <div class="premium-icon">💎</div>
+                <h3>Support Us</h3>
+                <div class="premium-price">$9.99<span>/one-time</span></div>
+                <ul class="premium-features">
+                    <li><strong>Everything in Premium, plus:</strong></li>
+                    <li>Diamond supporter badge 💎</li>
+                    <li>Special role in support server</li>
+                    <li>Early access to new features</li>
+                    <li>Exclusive supporter profile themes</li>
+                    <li>Direct developer access</li>
+                    <li>Shape future features</li>
+                    <li>Eternal gratitude ❤️</li>
+                </ul>
+                <div class="premium-cta">
+                    <a href="https://discord.com/application-directory/1465488984254714010" class="btn btn-outline">Coming Soon</a>
+                </div>
+            </div>
+        </div>
+
+        <div class="reveal" style="text-align: center; color: var(--text-secondary); font-size: 0.9rem;">
+            <p>💡 <strong>One-time purchase</strong> • No subscriptions • Keep forever • 30-day money-back guarantee</p>
+        </div>
+    </div>
+</section>
+
 <!-- CTA -->
 <section class="cta-section">
     <div class="cta-content reveal">
@@ -1048,7 +1279,7 @@
 <footer>
     <div class="footer-inner">
         <div class="footer-brand">
-            <div class="logo"><img src="jarvis-logo.jpg" alt="Jarvis Logo"></div>
+            <div class="logo">J</div>
             <span>Jarvis</span>
         </div>
         <ul class="footer-links">
