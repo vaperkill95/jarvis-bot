@@ -1,0 +1,531 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Jarvis — Terms of Service</title>
+    <link href="https://fonts.googleapis.com/css2?family=Sora:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg-primary: #0a0a0f;
+            --bg-secondary: #12121a;
+            --bg-card: #16161f;
+            --border: #1e1e2e;
+            --accent: #7c6aef;
+            --accent-glow: rgba(124, 106, 239, 0.15);
+            --accent-dim: #5a4cbf;
+            --text-primary: #e4e4ed;
+            --text-secondary: #8888a0;
+            --text-dim: #55556a;
+            --green: #4ae08a;
+            --red: #ef6a6a;
+            --orange: #efb86a;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Sora', sans-serif;
+            background: var(--bg-primary);
+            color: var(--text-primary);
+            line-height: 1.7;
+            min-height: 100vh;
+        }
+
+        /* Ambient background glow */
+        body::before {
+            content: '';
+            position: fixed;
+            top: -200px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 800px;
+            height: 600px;
+            background: radial-gradient(ellipse, rgba(124, 106, 239, 0.08) 0%, transparent 70%);
+            pointer-events: none;
+            z-index: 0;
+        }
+
+        .container {
+            max-width: 780px;
+            margin: 0 auto;
+            padding: 0 24px;
+            position: relative;
+            z-index: 1;
+        }
+
+        /* Header */
+        header {
+            padding: 60px 0 40px;
+            text-align: center;
+            border-bottom: 1px solid var(--border);
+            margin-bottom: 48px;
+        }
+
+        .bot-icon {
+            width: 72px;
+            height: 72px;
+            background: linear-gradient(135deg, var(--accent), var(--accent-dim));
+            border-radius: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 24px;
+            font-size: 32px;
+            box-shadow: 0 8px 32px rgba(124, 106, 239, 0.25);
+            animation: float 6s ease-in-out infinite;
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-6px); }
+        }
+
+        header h1 {
+            font-size: 2rem;
+            font-weight: 700;
+            letter-spacing: -0.5px;
+            margin-bottom: 8px;
+            background: linear-gradient(135deg, var(--text-primary), var(--accent));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        header p {
+            color: var(--text-secondary);
+            font-size: 0.9rem;
+            font-weight: 300;
+        }
+
+        .effective-date {
+            display: inline-block;
+            margin-top: 16px;
+            padding: 6px 14px;
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.75rem;
+            color: var(--text-dim);
+        }
+
+        /* Table of Contents */
+        .toc {
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            border-radius: 16px;
+            padding: 28px 32px;
+            margin-bottom: 48px;
+        }
+
+        .toc h2 {
+            font-size: 0.7rem;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            color: var(--accent);
+            margin-bottom: 16px;
+            font-weight: 600;
+        }
+
+        .toc ol {
+            list-style: none;
+            counter-reset: toc-counter;
+        }
+
+        .toc ol li {
+            counter-increment: toc-counter;
+            margin-bottom: 6px;
+        }
+
+        .toc ol li a {
+            color: var(--text-secondary);
+            text-decoration: none;
+            font-size: 0.88rem;
+            font-weight: 400;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            padding: 6px 8px;
+            border-radius: 8px;
+            transition: all 0.2s ease;
+        }
+
+        .toc ol li a::before {
+            content: counter(toc-counter, decimal-leading-zero);
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.72rem;
+            color: var(--text-dim);
+            min-width: 22px;
+            transition: color 0.2s ease;
+        }
+
+        .toc ol li a:hover {
+            color: var(--text-primary);
+            background: var(--accent-glow);
+        }
+
+        .toc ol li a:hover::before {
+            color: var(--accent);
+        }
+
+        /* Sections */
+        .section {
+            margin-bottom: 40px;
+            padding-bottom: 40px;
+            border-bottom: 1px solid var(--border);
+        }
+
+        .section:last-of-type {
+            border-bottom: none;
+        }
+
+        .section-number {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.7rem;
+            color: var(--accent);
+            display: block;
+            margin-bottom: 6px;
+            letter-spacing: 1px;
+        }
+
+        .section h2 {
+            font-size: 1.3rem;
+            font-weight: 600;
+            margin-bottom: 16px;
+            letter-spacing: -0.3px;
+        }
+
+        .section p {
+            color: var(--text-secondary);
+            font-size: 0.9rem;
+            margin-bottom: 12px;
+            font-weight: 300;
+        }
+
+        .section ul {
+            list-style: none;
+            margin: 12px 0;
+            padding: 0;
+        }
+
+        .section ul li {
+            position: relative;
+            padding-left: 20px;
+            margin-bottom: 8px;
+            color: var(--text-secondary);
+            font-size: 0.88rem;
+            font-weight: 300;
+        }
+
+        .section ul li::before {
+            content: '›';
+            position: absolute;
+            left: 0;
+            color: var(--accent);
+            font-weight: 600;
+            font-size: 1.1rem;
+            line-height: 1.6;
+        }
+
+        /* Highlight boxes */
+        .highlight {
+            background: var(--bg-card);
+            border-left: 3px solid var(--accent);
+            padding: 16px 20px;
+            border-radius: 0 12px 12px 0;
+            margin: 16px 0;
+        }
+
+        .highlight p {
+            margin-bottom: 0;
+            color: var(--text-primary);
+            font-weight: 400;
+            font-size: 0.85rem;
+        }
+
+        .highlight.warning {
+            border-left-color: var(--orange);
+        }
+
+        .highlight.danger {
+            border-left-color: var(--red);
+        }
+
+        /* Contact card */
+        .contact-card {
+            background: linear-gradient(135deg, var(--bg-card), rgba(124, 106, 239, 0.05));
+            border: 1px solid var(--border);
+            border-radius: 16px;
+            padding: 32px;
+            text-align: center;
+            margin: 40px 0;
+        }
+
+        .contact-card .discord-tag {
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+            background: var(--bg-primary);
+            border: 1px solid var(--border);
+            padding: 12px 24px;
+            border-radius: 12px;
+            margin-top: 12px;
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.95rem;
+            color: var(--accent);
+            transition: all 0.2s ease;
+        }
+
+        .contact-card .discord-tag:hover {
+            border-color: var(--accent);
+            box-shadow: 0 0 20px var(--accent-glow);
+        }
+
+        .contact-card .discord-tag svg {
+            width: 20px;
+            height: 20px;
+            fill: var(--accent);
+        }
+
+        /* Footer */
+        footer {
+            text-align: center;
+            padding: 40px 0 60px;
+            border-top: 1px solid var(--border);
+            margin-top: 20px;
+        }
+
+        footer p {
+            color: var(--text-dim);
+            font-size: 0.78rem;
+            font-weight: 300;
+        }
+
+        footer .version {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.7rem;
+            color: var(--text-dim);
+            margin-top: 8px;
+            opacity: 0.6;
+        }
+
+        /* Scroll animations */
+        .section, .toc, .contact-card {
+            opacity: 0;
+            transform: translateY(20px);
+            animation: fadeUp 0.6s ease forwards;
+        }
+
+        .toc { animation-delay: 0.1s; }
+        .section:nth-child(1) { animation-delay: 0.15s; }
+        .section:nth-child(2) { animation-delay: 0.2s; }
+        .section:nth-child(3) { animation-delay: 0.25s; }
+
+        @keyframes fadeUp {
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        /* Responsive */
+        @media (max-width: 600px) {
+            .container { padding: 0 16px; }
+            header { padding: 40px 0 28px; }
+            header h1 { font-size: 1.6rem; }
+            .toc { padding: 20px 22px; }
+            .section h2 { font-size: 1.15rem; }
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <header>
+        <div class="bot-icon">⚡</div>
+        <h1>Jarvis — Terms of Service</h1>
+        <p>Please read these terms carefully before using Jarvis.</p>
+        <span class="effective-date">Effective: February 15, 2026</span>
+    </header>
+
+    <nav class="toc">
+        <h2>Contents</h2>
+        <ol>
+            <li><a href="#acceptance">Acceptance of Terms</a></li>
+            <li><a href="#description">Bot Description</a></li>
+            <li><a href="#usage">Permitted Use</a></li>
+            <li><a href="#prohibited">Prohibited Conduct</a></li>
+            <li><a href="#data">Data Collection & Privacy</a></li>
+            <li><a href="#api">Third-Party APIs & Services</a></li>
+            <li><a href="#uptime">Availability & Uptime</a></li>
+            <li><a href="#liability">Limitation of Liability</a></li>
+            <li><a href="#termination">Termination</a></li>
+            <li><a href="#changes">Changes to Terms</a></li>
+            <li><a href="#contact">Contact</a></li>
+        </ol>
+    </nav>
+
+    <main>
+
+        <div class="section" id="acceptance">
+            <span class="section-number">01</span>
+            <h2>Acceptance of Terms</h2>
+            <p>By inviting, using, or interacting with Jarvis ("the Bot") in any Discord server, you agree to be bound by these Terms of Service. If you do not agree to these terms, you must remove the Bot from your server and discontinue use immediately.</p>
+            <p>These terms apply to all users, including but not limited to server owners, administrators, moderators, and general members who interact with the Bot.</p>
+        </div>
+
+        <div class="section" id="description">
+            <span class="section-number">02</span>
+            <h2>Bot Description</h2>
+            <p>Jarvis is a multi-purpose Discord bot offering the following features:</p>
+            <ul>
+                <li>Matchmaking queue system with MMR, rankings, and team balancing</li>
+                <li>Music playback from YouTube and other supported sources</li>
+                <li>Stream notifications for Twitch, Kick, YouTube, and TikTok</li>
+                <li>Welcome and farewell messages with customizable embeds</li>
+                <li>Server event logging (joins, leaves, edits, deletes, bans, etc.)</li>
+                <li>Reaction roles, verification panels, and role management</li>
+                <li>Team/clan creation and management</li>
+                <li>Moderation and administrative utilities</li>
+            </ul>
+        </div>
+
+        <div class="section" id="usage">
+            <span class="section-number">03</span>
+            <h2>Permitted Use</h2>
+            <p>You may use Jarvis for its intended purpose within Discord servers you own or have permission to manage. You agree to:</p>
+            <ul>
+                <li>Use the Bot in compliance with Discord's Terms of Service and Community Guidelines</li>
+                <li>Only grant the Bot permissions necessary for its features</li>
+                <li>Not use the Bot to harass, spam, or disrupt other users or servers</li>
+                <li>Use features like stream notifications, queue systems, and moderation tools responsibly</li>
+            </ul>
+        </div>
+
+        <div class="section" id="prohibited">
+            <span class="section-number">04</span>
+            <h2>Prohibited Conduct</h2>
+            <p>The following actions are strictly prohibited:</p>
+            <ul>
+                <li>Attempting to exploit, reverse-engineer, or abuse the Bot's functionality</li>
+                <li>Using the Bot to send unsolicited messages, spam, or advertisements</li>
+                <li>Using the Bot to collect personal information of other users without consent</li>
+                <li>Overloading or deliberately disrupting the Bot's services</li>
+                <li>Using the Bot for any illegal activity or to violate any applicable laws</li>
+                <li>Reselling, redistributing, or claiming ownership of the Bot</li>
+                <li>Automating interactions with the Bot beyond its intended slash commands</li>
+            </ul>
+            <div class="highlight danger">
+                <p>Violation of these terms may result in your server or user being blacklisted from Jarvis permanently without notice.</p>
+            </div>
+        </div>
+
+        <div class="section" id="data">
+            <span class="section-number">05</span>
+            <h2>Data Collection & Privacy</h2>
+            <p>Jarvis stores the following data to provide its features:</p>
+            <ul>
+                <li><strong>User IDs and usernames</strong> — for queue stats, MMR, leaderboards, and match history</li>
+                <li><strong>Server (Guild) IDs</strong> — for per-server configuration and settings</li>
+                <li><strong>Message IDs and Channel IDs</strong> — for reaction roles, sticky messages, and panel functionality</li>
+                <li><strong>Match data</strong> — team compositions, results, and MMR changes</li>
+                <li><strong>Configuration data</strong> — welcomer settings, farewell settings, stream tracking, log preferences</li>
+                <li><strong>API credentials you provide</strong> — Twitch Client ID/Secret and YouTube API keys (stored locally in the bot's database)</li>
+            </ul>
+            <div class="highlight">
+                <p>Jarvis does <strong>not</strong> collect or store message content, passwords, payment information, or personal data beyond Discord user/server identifiers. All data is stored locally in the Bot's database and is not shared with or sold to third parties.</p>
+            </div>
+            <p>If you wish to have your data deleted, contact the developer. Server owners may remove the Bot at any time, after which no new data will be collected for that server.</p>
+        </div>
+
+        <div class="section" id="api">
+            <span class="section-number">06</span>
+            <h2>Third-Party APIs & Services</h2>
+            <p>Jarvis integrates with the following third-party platforms to provide stream notifications and other features:</p>
+            <ul>
+                <li><strong>Twitch API</strong> — for checking live stream status (requires your own API credentials)</li>
+                <li><strong>YouTube Data API</strong> — for detecting YouTube live streams (requires your own API key)</li>
+                <li><strong>Kick API</strong> — for checking Kick live status</li>
+                <li><strong>TikTok</strong> — for detecting TikTok live streams</li>
+                <li><strong>YouTube (yt-dlp)</strong> — for music playback</li>
+            </ul>
+            <p>Use of these services is subject to their respective terms of service. Jarvis is not responsible for changes, outages, or data handling by third-party platforms. API credentials you provide are stored locally and used solely for their intended purpose.</p>
+        </div>
+
+        <div class="section" id="uptime">
+            <span class="section-number">07</span>
+            <h2>Availability & Uptime</h2>
+            <p>Jarvis is provided on an "as-is" and "as-available" basis. While we strive for reliability, we do not guarantee:</p>
+            <ul>
+                <li>100% uptime or uninterrupted service</li>
+                <li>That the Bot will be free of bugs, errors, or vulnerabilities</li>
+                <li>Continued availability of any specific feature</li>
+            </ul>
+            <div class="highlight warning">
+                <p>Jarvis may go offline for maintenance, updates, or unforeseen issues. Features may be added, modified, or removed at any time without prior notice.</p>
+            </div>
+        </div>
+
+        <div class="section" id="liability">
+            <span class="section-number">08</span>
+            <h2>Limitation of Liability</h2>
+            <p>To the fullest extent permitted by law, the developer of Jarvis shall not be liable for any indirect, incidental, special, consequential, or punitive damages arising from:</p>
+            <ul>
+                <li>Your use of or inability to use the Bot</li>
+                <li>Any data loss, corruption, or unauthorized access</li>
+                <li>Actions taken by the Bot based on your configuration</li>
+                <li>Downtime, service interruptions, or errors</li>
+                <li>Any third-party API failures or changes</li>
+            </ul>
+            <p>You acknowledge that you use Jarvis at your own risk and are solely responsible for your server's configuration and the Bot's permissions within it.</p>
+        </div>
+
+        <div class="section" id="termination">
+            <span class="section-number">09</span>
+            <h2>Termination</h2>
+            <p>The developer reserves the right to restrict, suspend, or terminate access to Jarvis for any user or server at any time, with or without cause, and with or without notice. Reasons for termination may include but are not limited to:</p>
+            <ul>
+                <li>Violation of these Terms of Service</li>
+                <li>Abuse or exploitation of the Bot</li>
+                <li>Violation of Discord's Terms of Service</li>
+                <li>Any conduct deemed harmful to the Bot's operation or other users</li>
+            </ul>
+            <p>You may terminate your use at any time by removing the Bot from your server.</p>
+        </div>
+
+        <div class="section" id="changes">
+            <span class="section-number">10</span>
+            <h2>Changes to Terms</h2>
+            <p>These Terms of Service may be updated at any time. Continued use of Jarvis after changes are posted constitutes your acceptance of the revised terms. Significant changes may be announced through the Bot's support channels.</p>
+            <p>It is your responsibility to review these terms periodically.</p>
+        </div>
+
+        <div class="section" id="contact">
+            <span class="section-number">11</span>
+            <h2>Contact</h2>
+            <p>If you have questions, concerns, or requests regarding these Terms of Service or the Bot, please contact the developer directly on Discord:</p>
+            
+            <div class="contact-card">
+                <p style="color: var(--text-secondary); font-size: 0.85rem; margin-bottom: 4px;">Developer &amp; Owner</p>
+                <div class="discord-tag">
+                    <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M20.317 4.37a19.791 19.791 0 0 0-4.885-1.515.074.074 0 0 0-.079.037c-.21.375-.444.864-.608 1.25a18.27 18.27 0 0 0-5.487 0 12.64 12.64 0 0 0-.617-1.25.077.077 0 0 0-.079-.037A19.736 19.736 0 0 0 3.677 4.37a.07.07 0 0 0-.032.027C.533 9.046-.32 13.58.099 18.057a.082.082 0 0 0 .031.057 19.9 19.9 0 0 0 5.993 3.03.078.078 0 0 0 .084-.028 14.09 14.09 0 0 0 1.226-1.994.076.076 0 0 0-.041-.106 13.107 13.107 0 0 1-1.872-.892.077.077 0 0 1-.008-.128 10.2 10.2 0 0 0 .372-.292.074.074 0 0 1 .077-.01c3.928 1.793 8.18 1.793 12.062 0a.074.074 0 0 1 .078.01c.12.098.246.198.373.292a.077.077 0 0 1-.006.127 12.299 12.299 0 0 1-1.873.892.077.077 0 0 0-.041.107c.36.698.772 1.362 1.225 1.993a.076.076 0 0 0 .084.028 19.839 19.839 0 0 0 6.002-3.03.077.077 0 0 0 .032-.054c.5-5.177-.838-9.674-3.549-13.66a.061.061 0 0 0-.031-.03z"/></svg>
+                    vaper
+                </div>
+            </div>
+        </div>
+
+    </main>
+
+    <footer>
+        <p>© 2026 Jarvis Bot — All rights reserved.</p>
+        <p class="version">v1.0 — Last updated February 15, 2026</p>
+    </footer>
+</div>
+
+</body>
+</html>
