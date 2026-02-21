@@ -2046,16 +2046,36 @@ async def on_ready():
     try:
         conn = sqlite3.connect(DB_FILE)
         c = conn.cursor()
-        c.execute('SELECT panel_id, message_id FROM reaction_role_panels')
+        c.execute('SELECT panel_id, message_id, channel_id, title, description FROM reaction_role_panels')
         panels = c.fetchall()
         conn.close()
-        
-        for panel_id, message_id in panels:
+
+        restored = 0
+        for panel_id, message_id, channel_id, title, description in panels:
             view = ReactionRoleView(panel_id)
-            bot.add_view(view, message_id=message_id)
-        
+
+            if message_id:
+                # Always re-register with discord.py so buttons stay alive after restart
+                bot.add_view(view, message_id=message_id)
+
+                # Also re-edit the message so Discord re-attaches the live view
+                try:
+                    channel = bot.get_channel(channel_id)
+                    if channel:
+                        msg = await channel.fetch_message(message_id)
+                        embed = _build_panel_embed(panel_id, title or "✅ Server Verification",
+                                                   description or "Click the button below to verify yourself and unlock the server!")
+                        await msg.edit(embed=embed, view=view)
+                        restored += 1
+                except Exception as edit_err:
+                    # Message might be deleted — just keep the view registered
+                    logger.warning(f'Could not re-edit panel message {message_id}: {edit_err}')
+            else:
+                # No message_id saved yet — register globally so any interaction still works
+                bot.add_view(view)
+
         if panels:
-            logger.info(f'Registered {len(panels)} button reaction role panels')
+            logger.info(f'Registered {len(panels)} button reaction role panels ({restored} messages re-attached)')
     except Exception as e:
         logger.error(f'Failed to load button reaction role panels: {e}')
     
