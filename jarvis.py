@@ -1051,22 +1051,22 @@ class QueueView(discord.ui.View):
             
             # Check if locked
             if settings['locked']:
-                await interaction.response.send_message("âŒ Queue is locked!", ephemeral=True)
+                await interaction.response.send_message("❌ Queue is locked!", ephemeral=True)
                 return
             
             # Check blacklist
             if is_user_blacklisted(interaction.guild.id, self.queue_name, interaction.user.id):
-                await interaction.response.send_message("âŒ You are blacklisted from this queue!", ephemeral=True)
+                await interaction.response.send_message("❌ You are blacklisted from this queue!", ephemeral=True)
                 return
             
             # Check required roles
             if not check_required_roles(interaction.guild, interaction.user, self.queue_name):
-                await interaction.response.send_message("âŒ You don't have the required role to join this queue!", ephemeral=True)
+                await interaction.response.send_message("❌ You don't have the required role to join this queue!", ephemeral=True)
                 return
             
             # Check already in queue
             if interaction.user.id in queue:
-                await interaction.response.send_message("âŒ You're already in the queue!", ephemeral=True)
+                await interaction.response.send_message("❌ You're already in the queue!", ephemeral=True)
                 return
             
             # Add to queue
@@ -1092,7 +1092,7 @@ class QueueView(discord.ui.View):
         except Exception as e:
             logger.error(f"Error in join handler: {e}", exc_info=True)
             try:
-                await interaction.followup.send(f"âŒ Error: {str(e)}")
+                await interaction.followup.send(f"❌ Error: {str(e)}")
             except:
                 pass
     
@@ -1102,7 +1102,7 @@ class QueueView(discord.ui.View):
             queue = get_queue(interaction.guild.id, self.queue_name)
             
             if interaction.user.id not in queue:
-                await interaction.response.send_message("âŒ You're not in the queue!", ephemeral=True)
+                await interaction.response.send_message("❌ You're not in the queue!", ephemeral=True)
                 return
             
             queue.remove(interaction.user.id)
@@ -1119,7 +1119,7 @@ class QueueView(discord.ui.View):
         except Exception as e:
             logger.error(f"Error in leave handler: {e}", exc_info=True)
             try:
-                await interaction.followup.send(f"âŒ Error: {str(e)}")
+                await interaction.followup.send(f"❌ Error: {str(e)}")
             except:
                 pass
     
@@ -1134,7 +1134,7 @@ class QueueView(discord.ui.View):
             
             if len(queue) < required_players:
                 await interaction.followup.send(
-                    f"âŒ Need {required_players} players! Currently: {len(queue)}"
+                    f"❌ Need {required_players} players! Currently: {len(queue)}"
                 )
                 return
             
@@ -1287,7 +1287,7 @@ class QueueView(discord.ui.View):
         except Exception as e:
             logger.error(f"Error starting match: {e}", exc_info=True)
             try:
-                await interaction.followup.send(f"âŒ Error starting match: {str(e)}")
+                await interaction.followup.send(f"❌ Error starting match: {str(e)}")
             except:
                 pass
     
@@ -1296,7 +1296,7 @@ class QueueView(discord.ui.View):
         # This would implement captain selection and draft
         # For now, fall back to balanced
         team1, team2 = create_balanced_teams(players, interaction.guild.id, self.queue_name, settings['team_size'])
-        await interaction.followup.send("⚠ï¸ Captain mode not fully implemented yet, using balanced teams")
+        await interaction.followup.send("⚠️ Captain mode not fully implemented yet, using balanced teams")
     
     async def auto_move_players(self, guild: discord.Guild, team1: List, team2: List, settings: Dict, match_number: int):
         """Auto-move players to team voice channels"""
@@ -1623,7 +1623,7 @@ class QueueView(discord.ui.View):
             )
             
             match_embed.add_field(
-                name="🎙ï¸ Voice Channels",
+                name="🎙️ Voice Channels",
                 value=f"🔵 {team1_voice.mention} ({team1_name})\n"
                       f"🔴 {team2_voice.mention} ({team2_name})",
                 inline=False
@@ -1714,7 +1714,7 @@ class MatchVoteView(discord.ui.View):
             # Check if user is in the match
             if user_id not in votes['all_players']:
                 await interaction.response.send_message(
-                    "âŒ Only players from this match can vote!",
+                    "❌ Only players from this match can vote!",
                     ephemeral=True
                 )
                 return
@@ -1756,7 +1756,7 @@ class MatchVoteView(discord.ui.View):
         except Exception as e:
             logger.error(f"Error handling vote: {e}", exc_info=True)
             try:
-                await interaction.response.send_message(f"âŒ Error: {str(e)}", ephemeral=True)
+                await interaction.response.send_message(f"❌ Error: {str(e)}", ephemeral=True)
             except:
                 pass
     
@@ -1781,7 +1781,7 @@ class MatchVoteView(discord.ui.View):
             current_game_info = ""
             if self.bo3_maps and self.current_game <= len(self.bo3_maps):
                 game = self.bo3_maps[self.current_game - 1]
-                current_game_info = f"▶ï¸ **Game {self.current_game}: {game['emoji']} {game['mode']} — {game['map']}**"
+                current_game_info = f"▶️ **Game {self.current_game}: {game['emoji']} {game['mode']} — {game['map']}**"
             
             # Future games
             future_lines = []
@@ -1801,7 +1801,7 @@ class MatchVoteView(discord.ui.View):
             description_parts.append(f"**{self.required_votes} votes needed**")
             
             embed = discord.Embed(
-                title=f"🗳ï¸ Best of 3 — Game {self.current_game} Voting",
+                title=f"🗳️ Best of 3 — Game {self.current_game} Voting",
                 description="\n".join(description_parts),
                 color=discord.Color.gold()
             )
@@ -1858,12 +1858,12 @@ class MatchVoteView(discord.ui.View):
                 results_lines.append(f"Game {i+1}: {g.get('emoji', '🎮')} {g.get('mode', '?')} — {g.get('map', '?')} → **{w}** ✅")
             
             embed = discord.Embed(
-                title=f"🗳ï¸ Best of 3 — Game {self.current_game} Voting",
+                title=f"🗳️ Best of 3 — Game {self.current_game} Voting",
                 description=(
                     f"**{winner_name}** won Game {self.current_game - 1}!\n\n"
                     f"**Series: {self.team1_name} {self.series_score[0]} - {self.series_score[1]} {self.team2_name}**\n\n"
                     + "\n".join(results_lines) + "\n"
-                    f"▶ï¸ **Game {self.current_game}: {next_game.get('emoji', '🎮')} {next_game.get('mode', '?')} — {next_game.get('map', '?')}**\n\n"
+                    f"▶️ **Game {self.current_game}: {next_game.get('emoji', '🎮')} {next_game.get('mode', '?')} — {next_game.get('map', '?')}**\n\n"
                     f"Vote for who won Game {self.current_game}!\n"
                     f"**{self.required_votes} votes needed**"
                 ),
@@ -1932,7 +1932,7 @@ class MatchVoteView(discord.ui.View):
             embed.add_field(
                 name="MMR Changes",
                 value=f"✅ **{winning_team_name}:** +{mmr_change} MMR\n"
-                      f"âŒ **Losing Team:** -{mmr_change} MMR",
+                      f"❌ **Losing Team:** -{mmr_change} MMR",
                 inline=False
             )
             
@@ -2277,7 +2277,7 @@ class QueueNameModal(discord.ui.Modal, title="Queue Name"):
         queue_name = self.queue_name_input.value.strip()
         
         if not queue_name:
-            await interaction.response.send_message("âŒ Queue name cannot be empty!", ephemeral=True)
+            await interaction.response.send_message("❌ Queue name cannot be empty!", ephemeral=True)
             return
         
         embed = discord.Embed(
@@ -2332,7 +2332,7 @@ class TeamSizeModal(discord.ui.Modal, title="Team Size"):
             team_size = int(self.team_size_input.value.strip())
             
             if team_size < 1 or team_size > 20:
-                await interaction.response.send_message("âŒ Team size must be between 1 and 20!", ephemeral=True)
+                await interaction.response.send_message("❌ Team size must be between 1 and 20!", ephemeral=True)
                 return
             
             # Map queue type to team selection mode
@@ -2377,10 +2377,10 @@ class TeamSizeModal(discord.ui.Modal, title="Team Size"):
             await interaction.response.edit_message(embed=embed, view=wizard)
             
         except ValueError:
-            await interaction.response.send_message("âŒ Please enter a valid number!", ephemeral=True)
+            await interaction.response.send_message("❌ Please enter a valid number!", ephemeral=True)
         except Exception as e:
             logger.error(f"Error creating queue: {e}", exc_info=True)
-            await interaction.response.send_message(f"âŒ Error creating queue: {str(e)}", ephemeral=True)
+            await interaction.response.send_message(f"❌ Error creating queue: {str(e)}", ephemeral=True)
 
 
 # ============================================================================
@@ -2416,7 +2416,7 @@ SETUP_STEPS = [
     },
     {
         "title": "Step 3: Set Up Staff Roles",
-        "emoji": "🛡️",
+        "emoji": "🛡️",
         "description": (
             "Grant staff permissions to specific roles so they can manage queues without needing full admin.\n\n"
             "**Run this command:**\n"
@@ -2427,7 +2427,7 @@ SETUP_STEPS = [
     },
     {
         "title": "Step 4: Configure Team Selection",
-        "emoji": "⚙ï¸",
+        "emoji": "⚙️",
         "description": (
             "Choose how teams are formed when a match starts.\n\n"
             "**Change team selection mode:**\n"
@@ -2442,7 +2442,7 @@ SETUP_STEPS = [
     },
     {
         "title": "Step 5: Maps & Game Mode",
-        "emoji": "🗺ï¸",
+        "emoji": "🗺️",
         "description": (
             "Set up maps and choose your game mode.\n\n"
             "**Add all default maps at once:**\n"
@@ -2561,7 +2561,7 @@ class PostSetupWizard(discord.ui.View):
             self.next_button.label = "✅ Finish Setup"
             self.next_button.style = discord.ButtonStyle.green
         else:
-            self.next_button.label = "Next ➡ï¸"
+            self.next_button.label = "Next ➡️"
             self.next_button.style = discord.ButtonStyle.primary
     
     def _format_description(self, template: str) -> str:
@@ -2590,7 +2590,7 @@ class PostSetupWizard(discord.ui.View):
         
         return embed
     
-    @discord.ui.button(label="⬅ï¸ Back", style=discord.ButtonStyle.secondary, row=0)
+    @discord.ui.button(label="⬅️ Back", style=discord.ButtonStyle.secondary, row=0)
     async def back_button(self, interaction: discord.Interaction, button: discord.ui.Button):
         if self.current_step > 0:
             self.current_step -= 1
@@ -2598,7 +2598,7 @@ class PostSetupWizard(discord.ui.View):
         embed = self.build_step_embed()
         await interaction.response.edit_message(embed=embed, view=self)
     
-    @discord.ui.button(label="Next ➡ï¸", style=discord.ButtonStyle.primary, row=0)
+    @discord.ui.button(label="Next ➡️", style=discord.ButtonStyle.primary, row=0)
     async def next_button(self, interaction: discord.Interaction, button: discord.ui.Button):
         if self.current_step < self.total_steps - 1:
             self.current_step += 1
@@ -2625,7 +2625,7 @@ class PostSetupWizard(discord.ui.View):
             await interaction.response.edit_message(embed=embed, view=None)
             self.stop()
     
-    @discord.ui.button(label="Skip â­ï¸", style=discord.ButtonStyle.secondary, row=0)
+    @discord.ui.button(label="Skip ⏭️", style=discord.ButtonStyle.secondary, row=0)
     async def skip_button(self, interaction: discord.Interaction, button: discord.ui.Button):
         """Skip ahead to the next step (same as next but semantically different for optional steps)"""
         if self.current_step < self.total_steps - 1:
@@ -2637,7 +2637,7 @@ class PostSetupWizard(discord.ui.View):
             # Same finish behavior
             await self.next_button.callback(interaction)
     
-    @discord.ui.button(label=" Finish Now", style=discord.ButtonStyle.danger, row=0)
+    @discord.ui.button(label="🔴 Finish Now", style=discord.ButtonStyle.danger, row=0)
     async def finish_now_button(self, interaction: discord.Interaction, button: discord.ui.Button):
         """End setup early"""
         embed = discord.Embed(
@@ -2703,7 +2703,7 @@ async def setup(interaction: discord.Interaction):
         
     except Exception as e:
         logger.error(f"Error in setup command: {e}", exc_info=True)
-        await interaction.response.send_message(f"âŒ Error starting setup: {str(e)}", ephemeral=True)
+        await interaction.response.send_message(f"❌ Error starting setup: {str(e)}", ephemeral=True)
 
 @bot.tree.command(name="startqueue", description="Display queue interface")
 @app_commands.default_permissions(manage_guild=True)
@@ -2769,7 +2769,7 @@ async def startqueue(interaction: discord.Interaction, queue_name: str = "defaul
     except Exception as e:
         logger.error(f"Error in startqueue command: {e}", exc_info=True)
         log_command(interaction.guild.id, interaction.user.id, "startqueue", False)
-        await interaction.followup.send(f"âŒ Error: {str(e)}")
+        await interaction.followup.send(f"❌ Error: {str(e)}")
 
 @bot.tree.command(name="clearqueue", description="Clear all players from queue")
 @app_commands.default_permissions(manage_guild=True)
@@ -2777,7 +2777,7 @@ async def startqueue(interaction: discord.Interaction, queue_name: str = "defaul
 async def clearqueue(interaction: discord.Interaction, queue_name: str = "default"):
     """Clear all players from queue"""
     if not is_user_staff(interaction.guild, interaction.user):
-        await interaction.response.send_message("âŒ Only staff can use this command!", ephemeral=True)
+        await interaction.response.send_message("❌ Only staff can use this command!", ephemeral=True)
         return
     
     queue = get_queue(interaction.guild.id, queue_name)
@@ -2793,7 +2793,7 @@ async def clearqueue(interaction: discord.Interaction, queue_name: str = "defaul
 async def lockqueue(interaction: discord.Interaction, queue_name: str = "default"):
     """Lock queue to prevent new joins"""
     if not is_user_staff(interaction.guild, interaction.user):
-        await interaction.response.send_message("âŒ Only staff can use this command!", ephemeral=True)
+        await interaction.response.send_message("❌ Only staff can use this command!", ephemeral=True)
         return
     
     settings = get_queue_settings(interaction.guild.id, queue_name)
@@ -2809,7 +2809,7 @@ async def lockqueue(interaction: discord.Interaction, queue_name: str = "default
 async def unlockqueue(interaction: discord.Interaction, queue_name: str = "default"):
     """Unlock queue to allow new joins"""
     if not is_user_staff(interaction.guild, interaction.user):
-        await interaction.response.send_message("âŒ Only staff can use this command!", ephemeral=True)
+        await interaction.response.send_message("❌ Only staff can use this command!", ephemeral=True)
         return
     
     settings = get_queue_settings(interaction.guild.id, queue_name)
@@ -2825,7 +2825,7 @@ async def unlockqueue(interaction: discord.Interaction, queue_name: str = "defau
 async def purge(interaction: discord.Interaction, limit: int = 50):
     """Purge channel messages except queue interface"""
     if not is_user_staff(interaction.guild, interaction.user):
-        await interaction.response.send_message("âŒ Only staff can use this command!", ephemeral=True)
+        await interaction.response.send_message("❌ Only staff can use this command!", ephemeral=True)
         return
     
     await interaction.response.defer(ephemeral=True)
@@ -2845,7 +2845,7 @@ async def purge(interaction: discord.Interaction, limit: int = 50):
         await interaction.followup.send(f"✅ Deleted {deleted} message(s)!")
         log_command(interaction.guild.id, interaction.user.id, "purge", True)
     except Exception as e:
-        await interaction.followup.send(f"âŒ Error: {str(e)}")
+        await interaction.followup.send(f"❌ Error: {str(e)}")
         log_command(interaction.guild.id, interaction.user.id, "purge", False)
 
 @bot.tree.command(name="removeuser", description="Remove a user from the queue")
@@ -2854,13 +2854,13 @@ async def purge(interaction: discord.Interaction, limit: int = 50):
 async def removeuser(interaction: discord.Interaction, user: discord.Member, queue_name: str = "default"):
     """Remove specific user from queue"""
     if not is_user_staff(interaction.guild, interaction.user):
-        await interaction.response.send_message("âŒ Only staff can use this command!", ephemeral=True)
+        await interaction.response.send_message("❌ Only staff can use this command!", ephemeral=True)
         return
     
     queue = get_queue(interaction.guild.id, queue_name)
     
     if user.id not in queue:
-        await interaction.response.send_message(f"âŒ {user.mention} is not in the queue!", ephemeral=True)
+        await interaction.response.send_message(f"❌ {user.mention} is not in the queue!", ephemeral=True)
         return
     
     queue.remove(user.id)
@@ -2873,18 +2873,18 @@ async def removeuser(interaction: discord.Interaction, user: discord.Member, que
 async def adduser(interaction: discord.Interaction, user: discord.Member, queue_name: str = "default"):
     """Add specific user to queue"""
     if not is_user_staff(interaction.guild, interaction.user):
-        await interaction.response.send_message("âŒ Only staff can use this command!", ephemeral=True)
+        await interaction.response.send_message("❌ Only staff can use this command!", ephemeral=True)
         return
     
     queue = get_queue(interaction.guild.id, queue_name)
     settings = get_queue_settings(interaction.guild.id, queue_name)
     
     if user.id in queue:
-        await interaction.response.send_message(f"âŒ {user.mention} is already in the queue!", ephemeral=True)
+        await interaction.response.send_message(f"❌ {user.mention} is already in the queue!", ephemeral=True)
         return
     
     if len(queue) >= settings['team_size'] * 2:
-        await interaction.response.send_message(f"âŒ Queue is full!", ephemeral=True)
+        await interaction.response.send_message(f"❌ Queue is full!", ephemeral=True)
         return
     
     queue.append(user.id)
@@ -2903,11 +2903,11 @@ async def adduser(interaction: discord.Interaction, user: discord.Member, queue_
 async def setteamsize(interaction: discord.Interaction, size: int, queue_name: str = "default"):
     """Set number of players per team"""
     if not is_user_staff(interaction.guild, interaction.user):
-        await interaction.response.send_message("âŒ Only staff can use this command!", ephemeral=True)
+        await interaction.response.send_message("❌ Only staff can use this command!", ephemeral=True)
         return
     
     if size < 1 or size > 20:
-        await interaction.response.send_message("âŒ Team size must be between 1 and 20!", ephemeral=True)
+        await interaction.response.send_message("❌ Team size must be between 1 and 20!", ephemeral=True)
         return
     
     settings = get_queue_settings(interaction.guild.id, queue_name)
@@ -2932,7 +2932,7 @@ async def setteamsize(interaction: discord.Interaction, size: int, queue_name: s
 async def setteammode(interaction: discord.Interaction, mode: str, queue_name: str = "default"):
     """Set team selection mode"""
     if not is_user_staff(interaction.guild, interaction.user):
-        await interaction.response.send_message("âŒ Only staff can use this command!", ephemeral=True)
+        await interaction.response.send_message("❌ Only staff can use this command!", ephemeral=True)
         return
     
     settings = get_queue_settings(interaction.guild.id, queue_name)
@@ -2953,7 +2953,7 @@ async def setteammode(interaction: discord.Interaction, mode: str, queue_name: s
 async def setcaptainmode(interaction: discord.Interaction, mode: str, queue_name: str = "default"):
     """Set how captains are chosen"""
     if not is_user_staff(interaction.guild, interaction.user):
-        await interaction.response.send_message("âŒ Only staff can use this command!", ephemeral=True)
+        await interaction.response.send_message("❌ Only staff can use this command!", ephemeral=True)
         return
     
     settings = get_queue_settings(interaction.guild.id, queue_name)
@@ -2978,7 +2978,7 @@ async def setteamnames(
 ):
     """Set custom team names for a queue"""
     if not is_user_staff(interaction.guild, interaction.user):
-        await interaction.response.send_message("âŒ Only staff can use this command!", ephemeral=True)
+        await interaction.response.send_message("❌ Only staff can use this command!", ephemeral=True)
         return
     
     try:
@@ -2987,7 +2987,7 @@ async def setteamnames(
         # Check if queue exists
         if settings['guild_id'] == 0:  # Default settings means queue doesn't exist
             await interaction.response.send_message(
-                f"âŒ Queue '{queue_name}' doesn't exist! Create it first with `/setup`",
+                f"❌ Queue '{queue_name}' doesn't exist! Create it first with `/setup`",
                 ephemeral=True
             )
             return
@@ -3023,7 +3023,7 @@ async def setteamnames(
         
     except Exception as e:
         logger.error(f"Error setting team names: {e}", exc_info=True)
-        await interaction.response.send_message(f"âŒ Error: {str(e)}", ephemeral=True)
+        await interaction.response.send_message(f"❌ Error: {str(e)}", ephemeral=True)
 
 @bot.tree.command(name="setmapvoting", description="Enable/disable map voting")
 @app_commands.default_permissions(manage_guild=True)
@@ -3031,7 +3031,7 @@ async def setteamnames(
 async def setmapvoting(interaction: discord.Interaction, enabled: bool, queue_name: str = "default"):
     """Toggle map voting"""
     if not is_user_staff(interaction.guild, interaction.user):
-        await interaction.response.send_message("âŒ Only staff can use this command!", ephemeral=True)
+        await interaction.response.send_message("❌ Only staff can use this command!", ephemeral=True)
         return
     
     settings = get_queue_settings(interaction.guild.id, queue_name)
@@ -3062,7 +3062,7 @@ GAME_MODE_ORDER = ["HP", "SND", "Overload"]
 async def addmap(interaction: discord.Interaction, map_name: str, queue_name: str = "default"):
     """Add map to voting pool"""
     if not is_user_staff(interaction.guild, interaction.user):
-        await interaction.response.send_message("âŒ Only staff can use this command!", ephemeral=True)
+        await interaction.response.send_message("❌ Only staff can use this command!", ephemeral=True)
         return
     
     try:
@@ -3093,7 +3093,7 @@ async def addmap(interaction: discord.Interaction, map_name: str, queue_name: st
         
         log_command(interaction.guild.id, interaction.user.id, "addmap", True)
     except Exception as e:
-        await interaction.response.send_message(f"âŒ Error: {str(e)}")
+        await interaction.response.send_message(f"❌ Error: {str(e)}")
         log_command(interaction.guild.id, interaction.user.id, "addmap", False)
 
 @bot.tree.command(name="removemap", description="Remove a map from the map pool")
@@ -3102,7 +3102,7 @@ async def addmap(interaction: discord.Interaction, map_name: str, queue_name: st
 async def removemap(interaction: discord.Interaction, map_name: str, queue_name: str = "default"):
     """Remove map from voting pool"""
     if not is_user_staff(interaction.guild, interaction.user):
-        await interaction.response.send_message("âŒ Only staff can use this command!", ephemeral=True)
+        await interaction.response.send_message("❌ Only staff can use this command!", ephemeral=True)
         return
     
     try:
@@ -3116,7 +3116,7 @@ async def removemap(interaction: discord.Interaction, map_name: str, queue_name:
         await interaction.response.send_message(f"✅ Removed map **{map_name}** from queue **{queue_name}**!")
         log_command(interaction.guild.id, interaction.user.id, "removemap", True)
     except Exception as e:
-        await interaction.response.send_message(f"âŒ Error: {str(e)}")
+        await interaction.response.send_message(f"❌ Error: {str(e)}")
         log_command(interaction.guild.id, interaction.user.id, "removemap", False)
 
 
@@ -3131,7 +3131,7 @@ async def removemap(interaction: discord.Interaction, map_name: str, queue_name:
 async def setgamemode(interaction: discord.Interaction, mode: str, queue_name: str = "default"):
     """Set the game mode for a queue"""
     if not is_user_staff(interaction.guild, interaction.user):
-        await interaction.response.send_message("âŒ Only staff can use this command!", ephemeral=True)
+        await interaction.response.send_message("❌ Only staff can use this command!", ephemeral=True)
         return
     
     settings = get_queue_settings(interaction.guild.id, queue_name)
@@ -3169,7 +3169,7 @@ async def setgamemode(interaction: discord.Interaction, mode: str, queue_name: s
 async def requiredrole(interaction: discord.Interaction, action: str, role: discord.Role, queue_name: str = "default"):
     """Manage required roles"""
     if not is_user_staff(interaction.guild, interaction.user):
-        await interaction.response.send_message("âŒ Only staff can use this command!", ephemeral=True)
+        await interaction.response.send_message("❌ Only staff can use this command!", ephemeral=True)
         return
     
     conn = sqlite3.connect(DB_FILE)
@@ -3205,7 +3205,7 @@ async def requiredrole(interaction: discord.Interaction, action: str, role: disc
 async def blacklist(interaction: discord.Interaction, action: str, user: discord.Member, queue_name: str = "default", reason: str = "No reason provided"):
     """Blacklist/unblacklist users"""
     if not is_user_staff(interaction.guild, interaction.user):
-        await interaction.response.send_message("âŒ Only staff can use this command!", ephemeral=True)
+        await interaction.response.send_message("❌ Only staff can use this command!", ephemeral=True)
         return
     
     conn = sqlite3.connect(DB_FILE)
@@ -3242,7 +3242,7 @@ async def blacklist(interaction: discord.Interaction, action: str, user: discord
 async def staffroles(interaction: discord.Interaction, action: str, role: discord.Role):
     """Manage staff roles"""
     if not interaction.user.guild_permissions.administrator:
-        await interaction.response.send_message("âŒ Only admins can use this command!", ephemeral=True)
+        await interaction.response.send_message("❌ Only admins can use this command!", ephemeral=True)
         return
     
     conn = sqlite3.connect(DB_FILE)
@@ -3281,14 +3281,14 @@ async def staffroles(interaction: discord.Interaction, action: str, role: discor
 async def resultschannel(interaction: discord.Interaction, action: str, channel: Optional[discord.TextChannel] = None, queue_name: str = "default"):
     """Set results announcement channel"""
     if not is_user_staff(interaction.guild, interaction.user):
-        await interaction.response.send_message("âŒ Only staff can use this command!", ephemeral=True)
+        await interaction.response.send_message("❌ Only staff can use this command!", ephemeral=True)
         return
     
     settings = get_queue_settings(interaction.guild.id, queue_name)
     
     if action == "set":
         if not channel:
-            await interaction.response.send_message("âŒ Must specify a channel!", ephemeral=True)
+            await interaction.response.send_message("❌ Must specify a channel!", ephemeral=True)
             return
         settings['results_channel'] = channel.id
         msg = f"✅ Set results channel to {channel.mention} for queue **{queue_name}**!"
@@ -3306,7 +3306,7 @@ async def resultschannel(interaction: discord.Interaction, action: str, channel:
 async def automove(interaction: discord.Interaction, enabled: bool, queue_name: str = "default"):
     """Auto-move players to team voice channels"""
     if not is_user_staff(interaction.guild, interaction.user):
-        await interaction.response.send_message("âŒ Only staff can use this command!", ephemeral=True)
+        await interaction.response.send_message("❌ Only staff can use this command!", ephemeral=True)
         return
     
     settings = get_queue_settings(interaction.guild.id, queue_name)
@@ -3323,7 +3323,7 @@ async def automove(interaction: discord.Interaction, enabled: bool, queue_name: 
 async def createchannels(interaction: discord.Interaction, enabled: bool, queue_name: str = "default"):
     """Toggle auto-creation of team channels"""
     if not is_user_staff(interaction.guild, interaction.user):
-        await interaction.response.send_message("âŒ Only staff can use this command!", ephemeral=True)
+        await interaction.response.send_message("❌ Only staff can use this command!", ephemeral=True)
         return
     
     settings = get_queue_settings(interaction.guild.id, queue_name)
@@ -3340,7 +3340,7 @@ async def createchannels(interaction: discord.Interaction, enabled: bool, queue_
 async def channelcategory(interaction: discord.Interaction, category: discord.CategoryChannel, queue_name: str = "default"):
     """Set category for auto-created channels"""
     if not is_user_staff(interaction.guild, interaction.user):
-        await interaction.response.send_message("âŒ Only staff can use this command!", ephemeral=True)
+        await interaction.response.send_message("❌ Only staff can use this command!", ephemeral=True)
         return
     
     settings = get_queue_settings(interaction.guild.id, queue_name)
@@ -3356,7 +3356,7 @@ async def channelcategory(interaction: discord.Interaction, category: discord.Ca
 async def pingplayers(interaction: discord.Interaction, enabled: bool, queue_name: str = "default"):
     """Toggle pinging players when match starts"""
     if not is_user_staff(interaction.guild, interaction.user):
-        await interaction.response.send_message("âŒ Only staff can use this command!", ephemeral=True)
+        await interaction.response.send_message("❌ Only staff can use this command!", ephemeral=True)
         return
     
     settings = get_queue_settings(interaction.guild.id, queue_name)
@@ -3377,7 +3377,7 @@ async def pingplayers(interaction: discord.Interaction, enabled: bool, queue_nam
 async def nametype(interaction: discord.Interaction, name_type: str, queue_name: str = "default"):
     """Set how names are displayed"""
     if not is_user_staff(interaction.guild, interaction.user):
-        await interaction.response.send_message("âŒ Only staff can use this command!", ephemeral=True)
+        await interaction.response.send_message("❌ Only staff can use this command!", ephemeral=True)
         return
     
     settings = get_queue_settings(interaction.guild.id, queue_name)
@@ -3394,7 +3394,7 @@ async def nametype(interaction: discord.Interaction, name_type: str, queue_name:
 async def stickymessage(interaction: discord.Interaction, enabled: bool, queue_name: str = "default"):
     """Toggle sticky message - queue stays at bottom of channel"""
     if not is_user_staff(interaction.guild, interaction.user):
-        await interaction.response.send_message("âŒ Only staff can use this command!", ephemeral=True)
+        await interaction.response.send_message("❌ Only staff can use this command!", ephemeral=True)
         return
     
     settings = get_queue_settings(interaction.guild.id, queue_name)
@@ -3461,7 +3461,7 @@ async def reportwin(interaction: discord.Interaction, team: int, queue_name: str
         
         # Check if there's an active match
         if interaction.guild.id not in active_matches or queue_name not in active_matches[interaction.guild.id]:
-            await interaction.followup.send("âŒ No active match for this queue!")
+            await interaction.followup.send("❌ No active match for this queue!")
             return
         
         match_data = active_matches[interaction.guild.id][queue_name]
@@ -3474,7 +3474,7 @@ async def reportwin(interaction: discord.Interaction, team: int, queue_name: str
         is_participant = interaction.user.id in team1 or interaction.user.id in team2
         
         if not (is_staff or is_participant):
-            await interaction.followup.send("âŒ Only staff or match participants can report results!")
+            await interaction.followup.send("❌ Only staff or match participants can report results!")
             return
         
         # Calculate MMR changes
@@ -3548,7 +3548,7 @@ async def reportwin(interaction: discord.Interaction, team: int, queue_name: str
         
     except Exception as e:
         logger.error(f"Error reporting win: {e}", exc_info=True)
-        await interaction.followup.send(f"âŒ Error: {str(e)}")
+        await interaction.followup.send(f"❌ Error: {str(e)}")
         log_command(interaction.guild.id, interaction.user.id, "reportwin", False)
 
 @bot.tree.command(name="cancelmatch", description="Cancel current match (no MMR changes)")
@@ -3557,11 +3557,11 @@ async def reportwin(interaction: discord.Interaction, team: int, queue_name: str
 async def cancelmatch(interaction: discord.Interaction, queue_name: str = "default"):
     """Cancel match without MMR changes"""
     if not is_user_staff(interaction.guild, interaction.user):
-        await interaction.response.send_message("âŒ Only staff can use this command!", ephemeral=True)
+        await interaction.response.send_message("❌ Only staff can use this command!", ephemeral=True)
         return
     
     if interaction.guild.id not in active_matches or queue_name not in active_matches[interaction.guild.id]:
-        await interaction.response.send_message("âŒ No active match for this queue!", ephemeral=True)
+        await interaction.response.send_message("❌ No active match for this queue!", ephemeral=True)
         return
     
     match_data = active_matches[interaction.guild.id][queue_name]
@@ -3598,7 +3598,7 @@ async def matchhistory(interaction: discord.Interaction, limit: int = 10, queue_
     conn.close()
     
     if not matches:
-        await interaction.followup.send(f"âŒ No match history for queue **{queue_name}**!")
+        await interaction.followup.send(f"❌ No match history for queue **{queue_name}**!")
         return
     
     embed = discord.Embed(
@@ -3699,7 +3699,7 @@ async def leaderboard(interaction: discord.Interaction, limit: int = 10, queue_n
     conn.close()
     
     if not results:
-        await interaction.followup.send("âŒ No players found!")
+        await interaction.followup.send("❌ No players found!")
         return
     
     embed = discord.Embed(title=title, color=discord.Color.gold())
@@ -3790,12 +3790,12 @@ async def compare(interaction: discord.Interaction, user1: discord.Member, user2
         stats2 = get_queue_player_stats(user2.id, interaction.guild.id, queue_name)
         
         embed = discord.Embed(
-            title=f"⚔ï¸ Player Comparison - {queue_name}",
+            title=f"⚔️ Player Comparison - {queue_name}",
             color=discord.Color.purple()
         )
         
         embed.add_field(name=user1.name, value=f"MMR: {stats1['mmr']}\nW/L: {stats1['wins']}/{stats1['losses']}", inline=True)
-        embed.add_field(name="VS", value="⚔ï¸", inline=True)
+        embed.add_field(name="VS", value="⚔️", inline=True)
         embed.add_field(name=user2.name, value=f"MMR: {stats2['mmr']}\nW/L: {stats2['wins']}/{stats2['losses']}", inline=True)
         
         mmr_diff = abs(stats1['mmr'] - stats2['mmr'])
@@ -3806,7 +3806,7 @@ async def compare(interaction: discord.Interaction, user1: discord.Member, user2
         player2 = get_or_create_player(user2.id, user2.name)
         
         embed = discord.Embed(
-            title="⚔ï¸ Global Player Comparison",
+            title="⚔️ Global Player Comparison",
             color=discord.Color.purple()
         )
         
@@ -3818,7 +3818,7 @@ async def compare(interaction: discord.Interaction, user1: discord.Member, user2
             value=f"MMR: {player1['mmr']}\nW/L: {player1['wins']}/{player1['losses']}\nWR: {wr1:.1f}%",
             inline=True
         )
-        embed.add_field(name="VS", value="⚔ï¸", inline=True)
+        embed.add_field(name="VS", value="⚔️", inline=True)
         embed.add_field(
             name=user2.name,
             value=f"MMR: {player2['mmr']}\nW/L: {player2['wins']}/{player2['losses']}\nWR: {wr2:.1f}%",
@@ -3838,11 +3838,11 @@ async def compare(interaction: discord.Interaction, user1: discord.Member, user2
 async def setmmr(interaction: discord.Interaction, user: discord.Member, mmr: int, queue_name: Optional[str] = None):
     """Manually set player MMR"""
     if not is_user_staff(interaction.guild, interaction.user):
-        await interaction.response.send_message("âŒ Only staff can use this command!", ephemeral=True)
+        await interaction.response.send_message("❌ Only staff can use this command!", ephemeral=True)
         return
     
     if mmr < 0:
-        await interaction.response.send_message("âŒ MMR cannot be negative!", ephemeral=True)
+        await interaction.response.send_message("❌ MMR cannot be negative!", ephemeral=True)
         return
     
     conn = sqlite3.connect(DB_FILE)
@@ -3872,7 +3872,7 @@ async def setmmr(interaction: discord.Interaction, user: discord.Member, mmr: in
 async def adjustmmr(interaction: discord.Interaction, user: discord.Member, amount: int, queue_name: Optional[str] = None):
     """Add or subtract MMR"""
     if not is_user_staff(interaction.guild, interaction.user):
-        await interaction.response.send_message("âŒ Only staff can use this command!", ephemeral=True)
+        await interaction.response.send_message("❌ Only staff can use this command!", ephemeral=True)
         return
     
     conn = sqlite3.connect(DB_FILE)
@@ -3904,12 +3904,12 @@ async def adjustmmr(interaction: discord.Interaction, user: discord.Member, amou
 async def resetstats(interaction: discord.Interaction, queue_name: str):
     """Reset all player stats for a queue"""
     if not interaction.user.guild_permissions.administrator:
-        await interaction.response.send_message("âŒ Only admins can use this command!", ephemeral=True)
+        await interaction.response.send_message("❌ Only admins can use this command!", ephemeral=True)
         return
     
     # Confirmation required
     await interaction.response.send_message(
-        f"⚠ï¸ This will reset ALL stats for queue **{queue_name}**!\n"
+        f"⚠️ This will reset ALL stats for queue **{queue_name}**!\n"
         f"Type `/confirmreset {queue_name}` to confirm.",
         ephemeral=True
     )
@@ -3920,7 +3920,7 @@ async def resetstats(interaction: discord.Interaction, queue_name: str):
 async def confirmreset(interaction: discord.Interaction, queue_name: str):
     """Confirm stats reset"""
     if not interaction.user.guild_permissions.administrator:
-        await interaction.response.send_message("âŒ Only admins can use this command!", ephemeral=True)
+        await interaction.response.send_message("❌ Only admins can use this command!", ephemeral=True)
         return
     
     conn = sqlite3.connect(DB_FILE)
@@ -3941,7 +3941,7 @@ async def confirmreset(interaction: discord.Interaction, queue_name: str):
 async def resetuser(interaction: discord.Interaction, user: discord.Member, queue_name: Optional[str] = None):
     """Reset user's stats"""
     if not is_user_staff(interaction.guild, interaction.user):
-        await interaction.response.send_message("âŒ Only staff can use this command!", ephemeral=True)
+        await interaction.response.send_message("❌ Only staff can use this command!", ephemeral=True)
         return
     
     conn = sqlite3.connect(DB_FILE)
@@ -3980,7 +3980,7 @@ async def resetuser(interaction: discord.Interaction, user: discord.Member, queu
 async def ranks(interaction: discord.Interaction, action: str, queue_name: str = "default"):
     """Manage auto-role ranks"""
     if not is_user_staff(interaction.guild, interaction.user):
-        await interaction.response.send_message("âŒ Only staff can use this command!", ephemeral=True)
+        await interaction.response.send_message("❌ Only staff can use this command!", ephemeral=True)
         return
     
     if action == "list":
@@ -3996,7 +3996,7 @@ async def ranks(interaction: discord.Interaction, action: str, queue_name: str =
             return
         
         embed = discord.Embed(
-            title=f"… Ranks - {queue_name}",
+            title=f"📊 Ranks - {queue_name}",
             color=discord.Color.gold()
         )
         
@@ -4028,7 +4028,7 @@ async def ranks(interaction: discord.Interaction, action: str, queue_name: str =
 async def rankadd(interaction: discord.Interaction, rank_name: str, min_mmr: int, max_mmr: int, role: discord.Role, queue_name: str = "default"):
     """Add MMR rank with auto-role"""
     if not is_user_staff(interaction.guild, interaction.user):
-        await interaction.response.send_message("âŒ Only staff can use this command!", ephemeral=True)
+        await interaction.response.send_message("❌ Only staff can use this command!", ephemeral=True)
         return
     
     conn = sqlite3.connect(DB_FILE)
@@ -4049,7 +4049,7 @@ async def rankadd(interaction: discord.Interaction, rank_name: str, min_mmr: int
 async def rankremove(interaction: discord.Interaction, rank_name: str, queue_name: str = "default"):
     """Remove MMR rank"""
     if not is_user_staff(interaction.guild, interaction.user):
-        await interaction.response.send_message("âŒ Only staff can use this command!", ephemeral=True)
+        await interaction.response.send_message("❌ Only staff can use this command!", ephemeral=True)
         return
     
     conn = sqlite3.connect(DB_FILE)
@@ -4080,7 +4080,7 @@ async def teamcreate(interaction: discord.Interaction, team_name: str):
               (interaction.guild.id, interaction.user.id))
     if c.fetchone():
         conn.close()
-        await interaction.response.send_message("âŒ You already own a team! Disband it first to create a new one.", ephemeral=True)
+        await interaction.response.send_message("❌ You already own a team! Disband it first to create a new one.", ephemeral=True)
         return
     
     # Create team
@@ -4100,7 +4100,7 @@ async def teamcreate(interaction: discord.Interaction, team_name: str):
         log_command(interaction.guild.id, interaction.user.id, "teamcreate", True)
     except sqlite3.IntegrityError:
         conn.close()
-        await interaction.response.send_message("âŒ A team with that name already exists!", ephemeral=True)
+        await interaction.response.send_message("❌ A team with that name already exists!", ephemeral=True)
 
 @bot.tree.command(name="teaminvite", description="Invite a player to your team")
 @app_commands.default_permissions(manage_guild=True)
@@ -4117,7 +4117,7 @@ async def teaminvite(interaction: discord.Interaction, user: discord.Member):
     
     if not team:
         conn.close()
-        await interaction.response.send_message("âŒ You don't own a team!", ephemeral=True)
+        await interaction.response.send_message("❌ You don't own a team!", ephemeral=True)
         return
     
     team_id, team_name = team
@@ -4126,7 +4126,7 @@ async def teaminvite(interaction: discord.Interaction, user: discord.Member):
     c.execute('SELECT team_id FROM team_members WHERE user_id=?', (user.id,))
     if c.fetchone():
         conn.close()
-        await interaction.response.send_message(f"âŒ {user.mention} is already in a team!", ephemeral=True)
+        await interaction.response.send_message(f"❌ {user.mention} is already in a team!", ephemeral=True)
         return
     
     conn.close()
@@ -4148,7 +4148,7 @@ async def teamjoin(interaction: discord.Interaction, team_name: str):
     c.execute('SELECT team_id FROM team_members WHERE user_id=?', (interaction.user.id,))
     if c.fetchone():
         conn.close()
-        await interaction.response.send_message("âŒ You're already in a team! Leave it first.", ephemeral=True)
+        await interaction.response.send_message("❌ You're already in a team! Leave it first.", ephemeral=True)
         return
     
     # Find team
@@ -4158,7 +4158,7 @@ async def teamjoin(interaction: discord.Interaction, team_name: str):
     
     if not result:
         conn.close()
-        await interaction.response.send_message(f"âŒ Team **{team_name}** doesn't exist!", ephemeral=True)
+        await interaction.response.send_message(f"❌ Team **{team_name}** doesn't exist!", ephemeral=True)
         return
     
     team_id = result[0]
@@ -4183,7 +4183,7 @@ async def teamleave(interaction: discord.Interaction):
     c.execute('SELECT team_id FROM teams WHERE owner_id=?', (interaction.user.id,))
     if c.fetchone():
         conn.close()
-        await interaction.response.send_message("âŒ You're the team owner! Use `/teamdisband` instead.", ephemeral=True)
+        await interaction.response.send_message("❌ You're the team owner! Use `/teamdisband` instead.", ephemeral=True)
         return
     
     # Remove from team
@@ -4195,7 +4195,7 @@ async def teamleave(interaction: discord.Interaction):
     if rows > 0:
         await interaction.response.send_message("✅ Left your team!")
     else:
-        await interaction.response.send_message("âŒ You're not in a team!", ephemeral=True)
+        await interaction.response.send_message("❌ You're not in a team!", ephemeral=True)
 
 @bot.tree.command(name="teamdisband", description="Disband your team")
 @app_commands.default_permissions(manage_guild=True)
@@ -4210,7 +4210,7 @@ async def teamdisband(interaction: discord.Interaction):
     
     if not result:
         conn.close()
-        await interaction.response.send_message("âŒ You don't own a team!", ephemeral=True)
+        await interaction.response.send_message("❌ You don't own a team!", ephemeral=True)
         return
     
     team_id, team_name = result
@@ -4244,7 +4244,7 @@ async def teamstats(interaction: discord.Interaction, team_name: Optional[str] =
     
     if not result:
         conn.close()
-        await interaction.response.send_message("âŒ Team not found!", ephemeral=True)
+        await interaction.response.send_message("❌ Team not found!", ephemeral=True)
         return
     
     team_id, guild_id, team_name, owner_id, created_at, wins, losses = result
@@ -4260,7 +4260,7 @@ async def teamstats(interaction: discord.Interaction, team_name: Optional[str] =
     winrate = (wins / (wins + losses) * 100) if (wins + losses) > 0 else 0
     
     embed = discord.Embed(
-        title=f"🛡️ {team_name}",
+        title=f"🛡️ {team_name}",
         color=discord.Color.blue()
     )
     
@@ -4289,7 +4289,7 @@ async def teamstats(interaction: discord.Interaction, team_name: Optional[str] =
 async def lobbydetails(interaction: discord.Interaction, action: str, queue_name: str = "default"):
     """Manage lobby details"""
     if not is_user_staff(interaction.guild, interaction.user):
-        await interaction.response.send_message("âŒ Only staff can use this command!", ephemeral=True)
+        await interaction.response.send_message("❌ Only staff can use this command!", ephemeral=True)
         return
     
     settings = get_queue_settings(interaction.guild.id, queue_name)
@@ -4300,7 +4300,7 @@ async def lobbydetails(interaction: discord.Interaction, action: str, queue_name
         await interaction.response.send_message(f"✅ Removed lobby details for queue **{queue_name}**!")
     elif action == "preview":
         if not settings['lobby_details_template']:
-            await interaction.response.send_message("âŒ No lobby details set!", ephemeral=True)
+            await interaction.response.send_message("❌ No lobby details set!", ephemeral=True)
             return
         
         # Generate preview
@@ -4330,7 +4330,7 @@ async def lobbydetails(interaction: discord.Interaction, action: str, queue_name
 async def lobbydetailsset(interaction: discord.Interaction, template: str, queue_name: str = "default"):
     """Set lobby details template"""
     if not is_user_staff(interaction.guild, interaction.user):
-        await interaction.response.send_message("âŒ Only staff can use this command!", ephemeral=True)
+        await interaction.response.send_message("❌ Only staff can use this command!", ephemeral=True)
         return
     
     settings = get_queue_settings(interaction.guild.id, queue_name)
@@ -4350,7 +4350,7 @@ async def lobbydetailsset(interaction: discord.Interaction, template: str, queue
 async def commandlog(interaction: discord.Interaction, limit: int = 10):
     """View command logs"""
     if not is_user_staff(interaction.guild, interaction.user):
-        await interaction.response.send_message("âŒ Only staff can use this command!", ephemeral=True)
+        await interaction.response.send_message("❌ Only staff can use this command!", ephemeral=True)
         return
     
     conn = sqlite3.connect(DB_FILE)
@@ -4364,7 +4364,7 @@ async def commandlog(interaction: discord.Interaction, limit: int = 10):
     conn.close()
     
     if not logs:
-        await interaction.response.send_message("âŒ No command logs found!", ephemeral=True)
+        await interaction.response.send_message("❌ No command logs found!", ephemeral=True)
         return
     
     embed = discord.Embed(
@@ -4376,7 +4376,7 @@ async def commandlog(interaction: discord.Interaction, limit: int = 10):
         member = interaction.guild.get_member(user_id)
         name = member.name if member else f"User {user_id}"
         time_str = datetime.fromisoformat(timestamp).strftime("%H:%M:%S")
-        status = "✅" if success else "âŒ"
+        status = "✅" if success else "❌"
         embed.add_field(
             name=f"{status} /{command_name}",
             value=f"{name} at {time_str}",
@@ -4391,7 +4391,7 @@ async def commandlog(interaction: discord.Interaction, limit: int = 10):
 async def activitylog(interaction: discord.Interaction, limit: int = 10, queue_name: str = "default"):
     """View activity logs"""
     if not is_user_staff(interaction.guild, interaction.user):
-        await interaction.response.send_message("âŒ Only staff can use this command!", ephemeral=True)
+        await interaction.response.send_message("❌ Only staff can use this command!", ephemeral=True)
         return
     
     conn = sqlite3.connect(DB_FILE)
@@ -4405,7 +4405,7 @@ async def activitylog(interaction: discord.Interaction, limit: int = 10, queue_n
     conn.close()
     
     if not logs:
-        await interaction.response.send_message("âŒ No activity logs found!", ephemeral=True)
+        await interaction.response.send_message("❌ No activity logs found!", ephemeral=True)
         return
     
     embed = discord.Embed(
@@ -4444,7 +4444,7 @@ async def viewmatch(interaction: discord.Interaction, match_id: int):
     conn.close()
     
     if not match:
-        await interaction.response.send_message(f"âŒ Match #{match_id} not found!", ephemeral=True)
+        await interaction.response.send_message(f"❌ Match #{match_id} not found!", ephemeral=True)
         return
     
     match_id, queue_name, timestamp, team1_json, team2_json, winner, mmr_change, score1, score2, map_played, lobby = match
@@ -4485,7 +4485,7 @@ async def viewmatch(interaction: discord.Interaction, match_id: int):
     
     # Match details
     if map_played:
-        embed.add_field(name="🗺ï¸ Map", value=map_played, inline=False)
+        embed.add_field(name="🗺️ Map", value=map_played, inline=False)
     if score1 or score2:
         embed.add_field(name="📊 Score", value=f"{score1} - {score2}", inline=False)
     if mmr_change:
@@ -4521,7 +4521,7 @@ async def recentmatches(interaction: discord.Interaction, user: Optional[discord
     conn.close()
     
     if not matches:
-        await interaction.response.send_message(f"âŒ No recent matches found for {target.mention}!", ephemeral=True)
+        await interaction.response.send_message(f"❌ No recent matches found for {target.mention}!", ephemeral=True)
         return
     
     embed = discord.Embed(
@@ -4535,7 +4535,7 @@ async def recentmatches(interaction: discord.Interaction, user: Optional[discord
         
         # Determine if player won
         player_team = 1 if target.id in team1 else 2
-        result = "✅ Win" if winner == player_team else "âŒ Loss" if winner else "⚪ No result"
+        result = "✅ Win" if winner == player_team else "❌ Loss" if winner else "⚪ No result"
         
         time_str = datetime.fromisoformat(timestamp).strftime("%m/%d %H:%M")
         embed.add_field(
@@ -4616,11 +4616,11 @@ async def winstreak(interaction: discord.Interaction, user: Optional[discord.Mem
 async def modifyresult(interaction: discord.Interaction, match_id: int, winning_team: int):
     """Modify match result (Admin only)"""
     if not interaction.user.guild_permissions.administrator:
-        await interaction.response.send_message("âŒ Only admins can use this command!", ephemeral=True)
+        await interaction.response.send_message("❌ Only admins can use this command!", ephemeral=True)
         return
     
     if winning_team not in [0, 1, 2]:
-        await interaction.response.send_message("âŒ Winning team must be 0 (draw), 1, or 2!", ephemeral=True)
+        await interaction.response.send_message("❌ Winning team must be 0 (draw), 1, or 2!", ephemeral=True)
         return
     
     conn = sqlite3.connect(DB_FILE)
@@ -4632,7 +4632,7 @@ async def modifyresult(interaction: discord.Interaction, match_id: int, winning_
     match = c.fetchone()
     
     if not match:
-        await interaction.response.send_message(f"âŒ Match #{match_id} not found!", ephemeral=True)
+        await interaction.response.send_message(f"❌ Match #{match_id} not found!", ephemeral=True)
         conn.close()
         return
     
@@ -4683,7 +4683,7 @@ async def modifyresult(interaction: discord.Interaction, match_id: int, winning_
 async def rolelimit(interaction: discord.Interaction, action: str, role: discord.Role, limit: Optional[int] = None, queue_name: str = "default"):
     """Manage role limits for matches"""
     if not is_user_staff(interaction.guild, interaction.user):
-        await interaction.response.send_message("âŒ Only staff can use this command!", ephemeral=True)
+        await interaction.response.send_message("❌ Only staff can use this command!", ephemeral=True)
         return
     
     conn = sqlite3.connect(DB_FILE)
@@ -4691,7 +4691,7 @@ async def rolelimit(interaction: discord.Interaction, action: str, role: discord
     
     if action == "add":
         if limit is None or limit < 1:
-            await interaction.response.send_message("âŒ Please specify a valid limit!", ephemeral=True)
+            await interaction.response.send_message("❌ Please specify a valid limit!", ephemeral=True)
             conn.close()
             return
         
@@ -4719,7 +4719,7 @@ async def rolelimit(interaction: discord.Interaction, action: str, role: discord
 async def mmrdecay(interaction: discord.Interaction, enabled: bool, queue_name: str = "default"):
     """Toggle MMR decay"""
     if not is_user_staff(interaction.guild, interaction.user):
-        await interaction.response.send_message("âŒ Only staff can use this command!", ephemeral=True)
+        await interaction.response.send_message("❌ Only staff can use this command!", ephemeral=True)
         return
     
     conn = sqlite3.connect(DB_FILE)
@@ -4739,11 +4739,11 @@ async def mmrdecay(interaction: discord.Interaction, enabled: bool, queue_name: 
 async def graceperiod(interaction: discord.Interaction, user: discord.Member, days: int):
     """Grant MMR decay grace period"""
     if not is_user_staff(interaction.guild, interaction.user):
-        await interaction.response.send_message("âŒ Only staff can use this command!", ephemeral=True)
+        await interaction.response.send_message("❌ Only staff can use this command!", ephemeral=True)
         return
     
     if days < 0 or days > 365:
-        await interaction.response.send_message("âŒ Days must be between 0 and 365!", ephemeral=True)
+        await interaction.response.send_message("❌ Days must be between 0 and 365!", ephemeral=True)
         return
     
     grace_until = (datetime.now() + timedelta(days=days)).isoformat()
@@ -4774,7 +4774,7 @@ async def graceperiod(interaction: discord.Interaction, user: discord.Member, da
 async def join(interaction: discord.Interaction):
     """Join user's voice channel"""
     if not interaction.user.voice:
-        await interaction.response.send_message("âŒ You're not in a voice channel!", ephemeral=True)
+        await interaction.response.send_message("❌ You're not in a voice channel!", ephemeral=True)
         return
     
     channel = interaction.user.voice.channel
@@ -4797,7 +4797,7 @@ async def leave(interaction: discord.Interaction):
         await interaction.guild.voice_client.disconnect()
         await interaction.response.send_message("✅ Left voice channel!")
     else:
-        await interaction.response.send_message("âŒ I'm not in a voice channel!", ephemeral=True)
+        await interaction.response.send_message("❌ I'm not in a voice channel!", ephemeral=True)
 
 @bot.tree.command(name="play", description="Play a song")
 @app_commands.default_permissions(manage_guild=True)
@@ -4809,13 +4809,13 @@ async def play(interaction: discord.Interaction, query: str):
     try:
         if not interaction.guild.voice_client:
             if not interaction.user.voice:
-                await interaction.followup.send("âŒ You need to be in a voice channel!")
+                await interaction.followup.send("❌ You need to be in a voice channel!")
                 return
             await interaction.user.voice.channel.connect()
         
         song = await extract_song_info(query)
         if not song:
-            await interaction.followup.send("âŒ Couldn't find that song!")
+            await interaction.followup.send("❌ Couldn't find that song!")
             return
         
         music_queue = get_music_queue(interaction.guild.id)
@@ -4844,7 +4844,7 @@ async def play(interaction: discord.Interaction, query: str):
     
     except Exception as e:
         logger.error(f"Play command error: {e}", exc_info=True)
-        await interaction.followup.send(f"âŒ An error occurred: {str(e)}")
+        await interaction.followup.send(f"❌ An error occurred: {str(e)}")
         log_command(interaction.guild.id, interaction.user.id, "play", False)
 
 @bot.tree.command(name="skip", description="Skip the current song")
@@ -4852,27 +4852,27 @@ async def skip(interaction: discord.Interaction):
     """Skip current song"""
     if interaction.guild.voice_client and interaction.guild.voice_client.is_playing():
         interaction.guild.voice_client.stop()
-        await interaction.response.send_message("â­ï¸ Skipped!")
+        await interaction.response.send_message("⏭️ Skipped!")
     else:
-        await interaction.response.send_message("âŒ Nothing is playing!", ephemeral=True)
+        await interaction.response.send_message("❌ Nothing is playing!", ephemeral=True)
 
 @bot.tree.command(name="pause", description="Pause playback")
 async def pause(interaction: discord.Interaction):
     """Pause current song"""
     if interaction.guild.voice_client and interaction.guild.voice_client.is_playing():
         interaction.guild.voice_client.pause()
-        await interaction.response.send_message("â¸ï¸ Paused!")
+        await interaction.response.send_message("⏸️ Paused!")
     else:
-        await interaction.response.send_message("âŒ Nothing is playing!", ephemeral=True)
+        await interaction.response.send_message("❌ Nothing is playing!", ephemeral=True)
 
 @bot.tree.command(name="resume", description="Resume playback")
 async def resume(interaction: discord.Interaction):
     """Resume paused song"""
     if interaction.guild.voice_client and interaction.guild.voice_client.is_paused():
         interaction.guild.voice_client.resume()
-        await interaction.response.send_message("▶ï¸ Resumed!")
+        await interaction.response.send_message("▶️ Resumed!")
     else:
-        await interaction.response.send_message("âŒ Nothing is paused!", ephemeral=True)
+        await interaction.response.send_message("❌ Nothing is paused!", ephemeral=True)
 
 @bot.tree.command(name="stop", description="Stop playback and clear queue")
 async def stop(interaction: discord.Interaction):
@@ -4882,9 +4882,9 @@ async def stop(interaction: discord.Interaction):
         music_queue.clear()
         now_playing.pop(interaction.guild.id, None)
         interaction.guild.voice_client.stop()
-        await interaction.response.send_message("â¹ï¸ Stopped and cleared queue!")
+        await interaction.response.send_message("⏹️ Stopped and cleared queue!")
     else:
-        await interaction.response.send_message("âŒ Nothing is playing!", ephemeral=True)
+        await interaction.response.send_message("❌ Nothing is playing!", ephemeral=True)
 
 @bot.tree.command(name="nowplaying", description="Show current song")
 async def nowplaying(interaction: discord.Interaction):
@@ -4901,7 +4901,7 @@ async def nowplaying(interaction: discord.Interaction):
         embed.add_field(name="Duration", value=f"{song['duration'] // 60}:{song['duration'] % 60:02d}")
         await interaction.response.send_message(embed=embed)
     else:
-        await interaction.response.send_message("âŒ Nothing is playing!", ephemeral=True)
+        await interaction.response.send_message("❌ Nothing is playing!", ephemeral=True)
 
 @bot.tree.command(name="musicqueue", description="View music queue")
 async def musicqueue(interaction: discord.Interaction):
@@ -4909,7 +4909,7 @@ async def musicqueue(interaction: discord.Interaction):
     music_queue = get_music_queue(interaction.guild.id)
     
     if music_queue.is_empty() and interaction.guild.id not in now_playing:
-        await interaction.response.send_message("âŒ The queue is empty!", ephemeral=True)
+        await interaction.response.send_message("❌ The queue is empty!", ephemeral=True)
         return
     
     embed = discord.Embed(title="🎵 Music Queue", color=discord.Color.blue())
@@ -4941,7 +4941,7 @@ async def musicqueue(interaction: discord.Interaction):
 async def volume(interaction: discord.Interaction, volume: int):
     """Set playback volume"""
     if not 0 <= volume <= 100:
-        await interaction.response.send_message("âŒ Volume must be between 0 and 100!", ephemeral=True)
+        await interaction.response.send_message("❌ Volume must be between 0 and 100!", ephemeral=True)
         return
     
     if interaction.guild.voice_client:
@@ -4953,7 +4953,7 @@ async def volume(interaction: discord.Interaction, volume: int):
         
         await interaction.response.send_message(f"🔊 Volume set to {volume}%")
     else:
-        await interaction.response.send_message("âŒ I'm not in a voice channel!", ephemeral=True)
+        await interaction.response.send_message("❌ I'm not in a voice channel!", ephemeral=True)
 
 @bot.tree.command(name="loop", description="Toggle loop mode")
 async def loop(interaction: discord.Interaction):
@@ -4962,7 +4962,7 @@ async def loop(interaction: discord.Interaction):
     music_queue.loop = not music_queue.loop
     
     status = "enabled" if music_queue.loop else "disabled"
-    await interaction.response.send_message(f"” Loop {status}!")
+    await interaction.response.send_message(f"🔁 Loop {status}!")
 
 # ============================================================================
 # REACTION ROLES (Simplified - Carl-bot style)
@@ -5013,7 +5013,7 @@ class ReactionRoleButton(discord.ui.Button):
     async def callback(self, interaction: discord.Interaction):
         role = interaction.guild.get_role(self.role_id)
         if not role:
-            await interaction.response.send_message("âŒ This role no longer exists!", ephemeral=True)
+            await interaction.response.send_message("❌ This role no longer exists!", ephemeral=True)
             return
         
         member = interaction.user
@@ -5025,7 +5025,7 @@ class ReactionRoleButton(discord.ui.Button):
                 )
             except discord.Forbidden:
                 await interaction.response.send_message(
-                    "âŒ I don't have permission to remove that role! Make sure my role is above this role in Server Settings → Roles.", ephemeral=True
+                    "❌ I don't have permission to remove that role! Make sure my role is above this role in Server Settings → Roles.", ephemeral=True
                 )
         else:
             try:
@@ -5035,7 +5035,7 @@ class ReactionRoleButton(discord.ui.Button):
                 )
             except discord.Forbidden:
                 await interaction.response.send_message(
-                    "âŒ I don't have permission to assign that role! Make sure my role is above this role in Server Settings → Roles.", ephemeral=True
+                    "❌ I don't have permission to assign that role! Make sure my role is above this role in Server Settings → Roles.", ephemeral=True
                 )
 
 
@@ -5122,7 +5122,7 @@ async def verify_setup(interaction: discord.Interaction, role: discord.Role):
     Creates a verification panel with a button. Users click it to get the role.
     """
     if not interaction.user.guild_permissions.administrator:
-        await interaction.response.send_message("âŒ Only admins can use this!", ephemeral=True)
+        await interaction.response.send_message("❌ Only admins can use this!", ephemeral=True)
         return
     
     # Create panel
@@ -5185,7 +5185,7 @@ async def rolepanel(
     Users click buttons to get/remove roles.
     """
     if not interaction.user.guild_permissions.administrator:
-        await interaction.response.send_message("âŒ Only admins can use this!", ephemeral=True)
+        await interaction.response.send_message("❌ Only admins can use this!", ephemeral=True)
         return
     
     roles = [r for r in [role1, role2, role3, role4, role5] if r is not None]
@@ -5241,7 +5241,7 @@ async def rolepaneladd(
 ):
     """Add a role to an existing panel"""
     if not interaction.user.guild_permissions.administrator:
-        await interaction.response.send_message("âŒ Only admins can use this!", ephemeral=True)
+        await interaction.response.send_message("❌ Only admins can use this!", ephemeral=True)
         return
     
     # Check panel exists
@@ -5251,21 +5251,21 @@ async def rolepaneladd(
               (panel_id, interaction.guild.id))
     if not c.fetchone():
         conn.close()
-        await interaction.response.send_message("âŒ Panel not found! Use `/rolepanellist` to see your panels.", ephemeral=True)
+        await interaction.response.send_message("❌ Panel not found! Use `/rolepanellist` to see your panels.", ephemeral=True)
         return
     
     # Check not already added
     c.execute('SELECT id FROM reaction_roles WHERE panel_id=? AND role_id=?', (panel_id, role.id))
     if c.fetchone():
         conn.close()
-        await interaction.response.send_message(f"âŒ **{role.name}** is already on that panel!", ephemeral=True)
+        await interaction.response.send_message(f"❌ **{role.name}** is already on that panel!", ephemeral=True)
         return
     
     # Check max 25
     c.execute('SELECT COUNT(*) FROM reaction_roles WHERE panel_id=?', (panel_id,))
     if c.fetchone()[0] >= 25:
         conn.close()
-        await interaction.response.send_message("âŒ Max 25 roles per panel!", ephemeral=True)
+        await interaction.response.send_message("❌ Max 25 roles per panel!", ephemeral=True)
         return
     conn.close()
     
@@ -5289,7 +5289,7 @@ async def rolepanelremove(
 ):
     """Remove a role from a panel"""
     if not interaction.user.guild_permissions.administrator:
-        await interaction.response.send_message("âŒ Only admins can use this!", ephemeral=True)
+        await interaction.response.send_message("❌ Only admins can use this!", ephemeral=True)
         return
     
     conn = sqlite3.connect(DB_FILE)
@@ -5298,13 +5298,13 @@ async def rolepanelremove(
               (panel_id, interaction.guild.id))
     if not c.fetchone():
         conn.close()
-        await interaction.response.send_message("âŒ Panel not found!", ephemeral=True)
+        await interaction.response.send_message("❌ Panel not found!", ephemeral=True)
         return
     
     c.execute('DELETE FROM reaction_roles WHERE panel_id=? AND role_id=?', (panel_id, role.id))
     if c.rowcount == 0:
         conn.close()
-        await interaction.response.send_message(f"âŒ **{role.name}** is not on that panel!", ephemeral=True)
+        await interaction.response.send_message(f"❌ **{role.name}** is not on that panel!", ephemeral=True)
         return
     conn.commit()
     conn.close()
@@ -5320,7 +5320,7 @@ async def rolepanelremove(
 async def rolepaneldelete(interaction: discord.Interaction, panel_id: int):
     """Delete a panel and its message"""
     if not interaction.user.guild_permissions.administrator:
-        await interaction.response.send_message("âŒ Only admins can use this!", ephemeral=True)
+        await interaction.response.send_message("❌ Only admins can use this!", ephemeral=True)
         return
     
     conn = sqlite3.connect(DB_FILE)
@@ -5331,7 +5331,7 @@ async def rolepaneldelete(interaction: discord.Interaction, panel_id: int):
     
     if not panel:
         conn.close()
-        await interaction.response.send_message("âŒ Panel not found!", ephemeral=True)
+        await interaction.response.send_message("❌ Panel not found!", ephemeral=True)
         return
     
     channel_id, message_id = panel
@@ -5429,7 +5429,7 @@ async def reactionrole(
     
     # Permission check
     if not interaction.user.guild_permissions.manage_roles and not interaction.user.guild_permissions.manage_guild:
-        await interaction.response.send_message("âŒ You need Manage Roles or Manage Server permission!", ephemeral=True)
+        await interaction.response.send_message("❌ You need Manage Roles or Manage Server permission!", ephemeral=True)
         return
     
     action = action.lower()
@@ -5438,7 +5438,7 @@ async def reactionrole(
     if action == "create":
         if not channel or not description:
             await interaction.response.send_message(
-                "âŒ Usage: `/reactionrole create [channel] [description] [title]`\n"
+                "❌ Usage: `/reactionrole create [channel] [description] [title]`\n"
                 "Example: `/reactionrole create #roles \"React to get roles!\" Role Selection`",
                 ephemeral=True
             )
@@ -5475,14 +5475,14 @@ async def reactionrole(
             logger.info(f"Created emoji reaction role message {msg.id} in {channel.name}")
             
         except Exception as e:
-            await interaction.response.send_message(f"âŒ Error creating message: {e}", ephemeral=True)
+            await interaction.response.send_message(f"❌ Error creating message: {e}", ephemeral=True)
             logger.error(f"Error creating emoji reaction role message: {e}")
     
     # ADD ROLE-REACTION PAIR
     elif action == "add":
         if not message_id or not emoji or not role:
             await interaction.response.send_message(
-                "âŒ Usage: `/reactionrole add [message_id] [emoji] @Role`\n"
+                "❌ Usage: `/reactionrole add [message_id] [emoji] @Role`\n"
                 "Example: `/reactionrole add 123456789 🎮 @Gamer`",
                 ephemeral=True
             )
@@ -5498,7 +5498,7 @@ async def reactionrole(
             
             if not result:
                 await interaction.response.send_message(
-                    f"âŒ Message ID `{msg_id}` is not a registered reaction role message!\n"
+                    f"❌ Message ID `{msg_id}` is not a registered reaction role message!\n"
                     f"Create one first with `/reactionrole create`",
                     ephemeral=True
                 )
@@ -5515,7 +5515,7 @@ async def reactionrole(
                 conn.commit()
             except sqlite3.IntegrityError:
                 await interaction.response.send_message(
-                    f"âŒ Emoji {emoji} is already used on this message!\n"
+                    f"❌ Emoji {emoji} is already used on this message!\n"
                     f"Remove it first with `/reactionrole remove {msg_id} {emoji}`",
                     ephemeral=True
                 )
@@ -5553,18 +5553,18 @@ async def reactionrole(
             logger.info(f"Added emoji reaction role pair: {emoji} -> {role.name} on message {msg_id}")
             
         except ValueError:
-            await interaction.response.send_message("âŒ Invalid message ID! Must be a number.", ephemeral=True)
+            await interaction.response.send_message("❌ Invalid message ID! Must be a number.", ephemeral=True)
         except discord.NotFound:
-            await interaction.response.send_message(f"âŒ Could not find message with ID `{message_id}`", ephemeral=True)
+            await interaction.response.send_message(f"❌ Could not find message with ID `{message_id}`", ephemeral=True)
         except Exception as e:
-            await interaction.response.send_message(f"âŒ Error: {e}", ephemeral=True)
+            await interaction.response.send_message(f"❌ Error: {e}", ephemeral=True)
             logger.error(f"Error adding emoji reaction role: {e}")
     
     # REMOVE ROLE-REACTION PAIR
     elif action == "remove":
         if not message_id or not emoji:
             await interaction.response.send_message(
-                "âŒ Usage: `/reactionrole remove [message_id] [emoji]`\n"
+                "❌ Usage: `/reactionrole remove [message_id] [emoji]`\n"
                 "Example: `/reactionrole remove 123456789 🎮`",
                 ephemeral=True
             )
@@ -5579,7 +5579,7 @@ async def reactionrole(
             
             if c.rowcount == 0:
                 await interaction.response.send_message(
-                    f"âŒ No role found for emoji {emoji} on message `{msg_id}`",
+                    f"❌ No role found for emoji {emoji} on message `{msg_id}`",
                     ephemeral=True
                 )
                 conn.close()
@@ -5604,7 +5604,7 @@ async def reactionrole(
             logger.info(f"Removed emoji reaction role: {emoji} from message {msg_id}")
             
         except Exception as e:
-            await interaction.response.send_message(f"âŒ Error: {e}", ephemeral=True)
+            await interaction.response.send_message(f"❌ Error: {e}", ephemeral=True)
             logger.error(f"Error removing emoji reaction role: {e}")
     
     # LIST ALL REACTION ROLE MESSAGES
@@ -5651,7 +5651,7 @@ async def reactionrole(
     elif action == "delete":
         if not message_id:
             await interaction.response.send_message(
-                "âŒ Usage: `/reactionrole delete [message_id]`",
+                "❌ Usage: `/reactionrole delete [message_id]`",
                 ephemeral=True
             )
             return
@@ -5666,7 +5666,7 @@ async def reactionrole(
             
             if not result:
                 await interaction.response.send_message(
-                    f"âŒ Message `{msg_id}` not found in database!",
+                    f"❌ Message `{msg_id}` not found in database!",
                     ephemeral=True
                 )
                 conn.close()
@@ -5691,13 +5691,13 @@ async def reactionrole(
             logger.info(f"Deleted emoji reaction role message {msg_id}")
             
         except Exception as e:
-            await interaction.response.send_message(f"âŒ Error: {e}", ephemeral=True)
+            await interaction.response.send_message(f"❌ Error: {e}", ephemeral=True)
     
     # EDIT REACTION ROLE MESSAGE
     elif action == "edit":
         if not message_id or not description:
             await interaction.response.send_message(
-                "âŒ Usage: `/reactionrole edit [message_id] [description] [title]`",
+                "❌ Usage: `/reactionrole edit [message_id] [description] [title]`",
                 ephemeral=True
             )
             return
@@ -5715,7 +5715,7 @@ async def reactionrole(
             
             if c.rowcount == 0:
                 await interaction.response.send_message(
-                    f"âŒ Message `{msg_id}` not found!",
+                    f"❌ Message `{msg_id}` not found!",
                     ephemeral=True
                 )
                 conn.close()
@@ -5746,13 +5746,13 @@ async def reactionrole(
             log_command(interaction.guild.id, interaction.user.id, 'reactionrole_edit')
             
         except Exception as e:
-            await interaction.response.send_message(f"âŒ Error: {e}", ephemeral=True)
+            await interaction.response.send_message(f"❌ Error: {e}", ephemeral=True)
     
     # SET MODE
     elif action == "mode":
         if not message_id or not mode:
             await interaction.response.send_message(
-                "âŒ Usage: `/reactionrole mode [message_id] [mode]`\n"
+                "❌ Usage: `/reactionrole mode [message_id] [mode]`\n"
                 "**Modes:** normal, unique, temporary, reversed",
                 ephemeral=True
             )
@@ -5761,7 +5761,7 @@ async def reactionrole(
         valid_modes = ['normal', 'unique', 'temporary', 'reversed']
         if mode not in valid_modes:
             await interaction.response.send_message(
-                f"âŒ Invalid mode! Use: {', '.join(valid_modes)}",
+                f"❌ Invalid mode! Use: {', '.join(valid_modes)}",
                 ephemeral=True
             )
             return
@@ -5775,7 +5775,7 @@ async def reactionrole(
             
             if c.rowcount == 0:
                 await interaction.response.send_message(
-                    f"âŒ Message `{msg_id}` not found!",
+                    f"❌ Message `{msg_id}` not found!",
                     ephemeral=True
                 )
                 conn.close()
@@ -5799,11 +5799,11 @@ async def reactionrole(
             log_command(interaction.guild.id, interaction.user.id, 'reactionrole_mode')
             
         except Exception as e:
-            await interaction.response.send_message(f"âŒ Error: {e}", ephemeral=True)
+            await interaction.response.send_message(f"❌ Error: {e}", ephemeral=True)
     
     else:
         await interaction.response.send_message(
-            "âŒ Invalid action! Use: create, add, remove, list, delete, edit, or mode",
+            "❌ Invalid action! Use: create, add, remove, list, delete, edit, or mode",
             ephemeral=True
         )
 
@@ -6262,7 +6262,7 @@ async def help_command(interaction: discord.Interaction):
     )
     
     embed.add_field(
-        name="⚙ï¸ Configuration",
+        name="⚙️ Configuration",
         value=(
             "`/setteamsize` `/setteammode` - Team settings\n"
             "`/setcaptainmode` - Captain selection\n"
@@ -6305,7 +6305,7 @@ async def help_command(interaction: discord.Interaction):
     )
     
     embed.add_field(
-        name="🛡️ Teams/Clans",
+        name="🛡️ Teams/Clans",
         value=(
             "`/teamcreate` - Create team\n"
             "`/teaminvite` `/teamjoin` - Join team\n"
@@ -6371,13 +6371,13 @@ async def help_command(interaction: discord.Interaction):
 async def ping(interaction: discord.Interaction):
     """Test bot responsiveness"""
     latency = round(bot.latency * 1000)
-    await interaction.response.send_message(f"“ Pong! Latency: {latency}ms", ephemeral=True)
+    await interaction.response.send_message(f"🏓 Pong! Latency: {latency}ms", ephemeral=True)
 
 @bot.tree.command(name="sync", description="Sync commands (Admin only)")
 async def sync(interaction: discord.Interaction):
     """Manually sync slash commands"""
     if not interaction.user.guild_permissions.administrator:
-        await interaction.response.send_message("âŒ Only admins can use this command!", ephemeral=True)
+        await interaction.response.send_message("❌ Only admins can use this command!", ephemeral=True)
         return
     
     await interaction.response.defer(ephemeral=True)
@@ -6385,7 +6385,7 @@ async def sync(interaction: discord.Interaction):
         synced = await bot.tree.sync()
         await interaction.followup.send(f'✅ Synced {len(synced)} commands!')
     except Exception as e:
-        await interaction.followup.send(f'âŒ Error: {e}')
+        await interaction.followup.send(f'❌ Error: {e}')
 
 # ============================================================================
 # RUN BOT
